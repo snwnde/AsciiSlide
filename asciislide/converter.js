@@ -1,4 +1,4 @@
-import { isAbsolute, join } from 'path'
+const { isAbsolute, join } = require('path');
 const defaultAssetsDir = `../../assets/css`
 
 const customStyleDir = (node) => {
@@ -97,14 +97,14 @@ const elementId = (node) => {
   return ''
 }
 
-export function paragraph(node) { return `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>` }
-export function section(node) {
+function paragraph(node) { return `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>` }
+function section(node) {
   return `<section class="${sectionRoles(node).join(' ')} ${node.getTitle() === '!' ? 'no-title' : ''}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
   ${sectionTitle(node)}
   ${node.getContent()}
 </section>`
 }
-export function document(node) {
+function document(node) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,16 +126,24 @@ hljs.initHighlightingOnLoad();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>`
 }
-export function open(node) { return `<div${elementId(node)} class="${node.getRoles().join(' ')}">${node.getContent()}</div>` }
-export function image(node) {
+function open(node) { return `<div${elementId(node)} class="${node.getRoles().join(' ')}">${node.getContent()}</div>` }
+function image(node) {
   const roles = node.getRoles()
   if (roles && roles.includes('canvas')) {
     return ''
   }
   const height = node.getAttribute('height')
   const width = node.getAttribute('width')
-  const figcaption = node.getAttribute('figcaption')
+  const figcaption = node.getAttribute('figcaption') || ''
   return `<figure class="image ${node.getRoles().join(' ')}"><img src="${node.getImageUri(node.getAttribute('target'))}" height="${height}" width="${width}"/>
     <figcaption>${figcaption}</figcaption>
     </figure>`
+}
+
+module.exports = {
+  paragraph: paragraph,
+  section: section,
+  document: document,
+  open: open,
+  image: image
 }
