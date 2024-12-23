@@ -1,0 +1,140 @@
+= Example Presentation
+:author: Jane Doe
+:email: jane.doe@example.org
+:lang: en
+:toc!:
+:stylesdir:
+:stylesheet:
+:stem: latex
+:icons: font
+:imagesdir: images
+:institute: XYZ Institute
+
+== Features
+
+- Simple and clean syntax based on https://asciidoc.org/[AsciiDoc]
+    * Support for LaTeX-style equations
+    * Code highlighting and image inclusion
+    * HTML rendering
+    * Source code readbility
+- Based on web standards
+    * Write HTML if you want
+    * Customizable with CSS
+    * Output to both HTML and PDF
+
+== A slide
+A slide is a level 2 section in AsciiDoc.
+
+[source,asciidoc]
+----
+== Your slide title
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+erat, sed diam voluptua.
+----
+
+Write LaTeX-style equations using the `stem` block:
+[.columns-2]
+--
+[.column]
+[stem]
+++++
+    E = mc^2
+++++
+[.column]
+[source,asciidoc]
+----
+[stem]
+++++
+    E = mc^2
+++++
+----
+--
+
+== A slide with code block
+
+The source code is *highlighted* in the code block.
+[source,python]
+----
+def hello():
+    print('Hello, world!')
+----
+
+[source,asciidoc]
+----
+[source,python]
+----ㅤ
+def hello():
+    print('Hello, world!')
+----ㅤ
+----
+
+== A slide with image
+An image can be included in a slide.
+[.columns-2]
+--
+[.column]
+image::example.png[width=100%]
+[.column]
+[source,asciidoc]
+----
+image::example.png[width=100%]
+----
+--
+
+== A slide with two columns
+The previous slide is an example of a slide with two columns.
+[source,asciidoc]
+----
+== A slide with image
+An image can be included in a slide.
+[.columns-2]
+--
+[.column]
+image::example.png[width=100%]
+[.column]
+[source,asciidoc]
+----ㅤ
+image::example.png[width=100%]
+----ㅤ
+----
+
+== Write HTML
+You can write and render HTML in a slide.
+
+++++
+<div class="gallery">
+    <h3 style="text-align: center;">Image Gallery</h3>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 1" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 2" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 3" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 4" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+    </div>
+</div>
+++++
+
+== Configuration
+Define the presentation settings at the header of the file.
+[source,asciidoc]
+----
+= Example Presentation
+:author: Jane Doe
+:email: jane.doe@example.org
+:lang: en
+:toc!:
+:stylesdir: path/to/styles
+:stylesheet: custom.css
+:stem: latex
+:icons: font
+:imagesdir: images
+:institute: XYZ Institute
+----
