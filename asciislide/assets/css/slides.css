@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300;400;600&family=Alegreya+SC:wght@300;400;500&family=Roboto:wght@300;400;500&display=swap');
+
+@page {
+  size: 1024px 768px;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+p,
+ul {
+  font-family: "Roboto";
+  text-align: left;
+  line-height: 1.3;
+  font-weight: 400;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+strong {
+  color: #FFB703;
+}
+
+html {
+  font-size: 16pt;
+}
+
+.slide {
+  position: relative;
+  width: 1024px;
+  height: 768px;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide.title {
+  justify-content: center;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: #023047;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-top: 0;
+  font-family: "Yanone Kaffeesatz";
+  padding-left: unset;
+  padding-right: unset;
+}
+
+h2 {
+  font-weight: 400;
+}
+
+h3 {
+  font-weight: 300;
+  text-align: left;
+}
+
+.slide.title h1 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.slide.title h2 {
+  text-align: center;
+}
+
+.no-title>h2 {
+  display: none;
+}
+
+.slide>footer {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.slide.title>footer>p.author {
+  font-family: "Alegreya SC";
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.slide.title>footer>p.institute {
+  font-family: "Yanone Kaffeesatz";
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.slide.title>footer {
+  position: inherit;
+  right: auto;
+  bottom: auto;
+  color: #FFB703;
+}
+
+.slide::after {
+  content: attr(data-slide-number) "/" attr(data-slide-count);
+  counter-increment: slide;
+  font-size: .75rem;
+  position: absolute;
+  bottom: 1.25rem;
+  right: 3.75rem;
+  line-height: 1.9;
+}
+
+.slide.title::after {
+  content: ''
+}
+
+.slide.no-pagination::after {
+  content: ''
+}
+
+.columns-2 {
+  display: flex;
+}
+
+.columns-2>* {
+  flex: 0 0 50%;
+  padding-right: 2rem;
+}
+
+.exampleblock.column>.content {
+  background-color: inherit;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+figcaption {
+  font-family: "Roboto";
+  font-size: 0.75rem;
+  text-align: center;
+  padding-top: 10px;
+}
+
+td.icon {
+  font-size: 20px;
+}
+
+td.content {
+  font-family: "Roboto";
+  font-size: 20px;
+}
