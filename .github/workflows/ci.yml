@@ -12,7 +12,6 @@ on:
 
 env:
   IMAGE_NAME: asciislide
-  IMAGE_USER: asciidoctor
 
 jobs:
   build-and-push:
@@ -95,10 +94,10 @@ jobs:
       - 
         name: Run example build with Docker
         run: |
+          mkdir -p ${{ github.workspace }}/build
           docker run --rm \
             -v ${{ github.workspace }}/example:/asciislide/src/example \
             -v ${{ github.workspace }}/build:/asciislide/build \
-            --user $IMAGE_USER:$IMAGE_USER \
             ${{ env.IMAGE_NAME }}:latest /bin/sh -c "make"
 
       - 
