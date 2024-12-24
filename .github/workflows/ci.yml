@@ -98,15 +98,29 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ${{ env.IMAGE_NAME }}:latest
-          options: -v ${{ github.workspace }}/example:/asciislide/src/example -v ${{ github.workspace }}/build:/asciislide/build -u root
+          options: -v ${{ github.workspace }}/example:/asciislide/src/example -v ${{ github.workspace }}/public:/asciislide/build -u root
           run: |
             make
+            cp -r assets build/assets
+            mkdir -p build/example/pdf, build/example/html
+            mv build/example/main.pdf build/example/pdf/main.pdf
+            mv build/example/* build/example/html/
+            echo '<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta http-equiv="refresh" content="0; url=main.html">
+                <title>Redirecting...</title>
+            </head>
+            <body>
+                <p>If you are not redirected automatically, follow this <a href="./example/html/main.html">link to main.html</a>.</p>
+            </body>
+            </html>' > build/index.html
       - 
         name: Upload example artifact
         uses: actions/upload-artifact@v3
         with:
           name: example-build
-          path: ${{ github.workspace }}/build/example
+          path: ${{ github.workspace }}/public
           if-no-files-found: error
 
   deploy-example:
@@ -121,12 +135,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: example-build
-          path: ${{ github.workspace }}/build/example
+          path: ${{ github.workspace }}/public
 
       - 
         name: Verify artifact exists
         run: |
-          if [ ! -d ${{ github.workspace }}/build/example ]; then
+          if [ ! -d ${{ github.workspace }}/public ]; then
             echo "No artifact found, skipping deployment."
             exit 1
           fi
@@ -136,5 +150,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ github.workspace }}/build/example
+          publish_dir: ${{ github.workspace }}/public
           force_orphan: true
