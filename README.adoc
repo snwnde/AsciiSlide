@@ -1,0 +1,34 @@
+= AsciiSlide
+:lang: en
+
+Create presentation slides with AsciiDoc.
+
+== Example
+
+- PDF: link:https://snwnde.github.io/AsciiSlide/example/html/main.pdf[example.pdf]
+- HTML: link:https://snwnde.github.io/AsciiSlide/example/html/main.html[example.html]
+    * TODO: presentation mode
+
+== Usage
+
+The working directory being `asciislide`, place the presentation project in the `src` directory:
+
+----
+.
+|-- Makefile
+|-- assets
+|-- build
+|-- converter.js
+`-- src
+    `-- example
+        |-- images
+        `-- main.adoc
+----
+
+Then run `make` to generate the slides in the `build` directory.
+
+== Inspirations
+
+- link:https://matklad.github.io/2019/05/19/consider-using-asciidoctor-for-your-next-presentation.html[Consider Using Asciidoctor for Your Next Presentation]
+
+- link:https://github.com/nikolaialex/asciidoc-slides/[Asciidoc-Slides]

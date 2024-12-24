@@ -1,0 +1,22 @@
+= Licence
+
+== Vendored dependencies
+
+- link:asciislide/assets/css/asciidoctor.css[asciidoctor.css] is licensed under the MIT license.
+
+== This work
+
+++++
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+</a>
+<br/>
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+++++
+
+=== Credits
+
+link:asciislide/assets/css/slides.css[slides.css]
+and link:asciislide/converter.js[converter.js] are
+adapted from https://github.com/matklad/rust-course
+

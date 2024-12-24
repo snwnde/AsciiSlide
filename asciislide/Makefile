@@ -12,10 +12,9 @@ HTML_FILES := $(SRC_FILES:%.adoc=$(BUILD_DIR)/%.html)
 OUT_IMG = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/*/images/*))
 OUT_CSS = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/*/assets/css/*))
 OUT_JS = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/*/assets/js/*))
-OUT_LICENSE = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/*/assets/LICENSE.md))
 
 .PHONY: all
-all: $(HTML_FILES) $(OUT_IMG) $(OUT_CSS) $(OUT_JS) $(OUT_LICENSE)
+all: $(HTML_FILES) $(OUT_IMG) $(OUT_CSS) $(OUT_JS)
 	@echo "All tasks finished."
 
 $(BUILD_DIR)/%.html: $(SRC_DIR)/%.adoc
