@@ -15,7 +15,7 @@ env:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
@@ -78,7 +78,7 @@ jobs:
           path: image.tar
 
   build-example:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: build-and-push
 
     steps:
@@ -117,14 +117,14 @@ jobs:
             </html>' > build/index.html
       - 
         name: Upload example artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: example-build
           path: ${{ github.workspace }}/public
           if-no-files-found: error
 
   deploy-example:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: build-example
     permissions:
       contents: write
@@ -132,7 +132,7 @@ jobs:
     steps:
       - 
         name: Download example artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: example-build
           path: ${{ github.workspace }}/public
