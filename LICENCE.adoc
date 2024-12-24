@@ -18,5 +18,5 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 
 link:asciislide/assets/css/slides.css[slides.css]
 and link:asciislide/converter.js[converter.js] are
-adapted from https://github.com/matklad/rust-course
+adapted from https://github.com/matklad/rust-course.
 
