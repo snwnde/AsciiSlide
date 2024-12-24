@@ -102,13 +102,14 @@ jobs:
           run: |
             make
             cp -r assets build/assets
-            mkdir -p build/example/pdf, build/example/html
-            mv build/example/main.pdf build/example/pdf/main.pdf
-            mv build/example/* build/example/html/
+            mv build/example build/_example
+            mkdir -p build/example/html
+            cp -r build/_example/* build/example/html
+            rm -rf build/_example
             echo '<!DOCTYPE html>
             <html lang="en">
             <head>
-                <meta http-equiv="refresh" content="0; url=main.html">
+                <meta http-equiv="refresh" content="0; url=./example/html/main.html">
                 <title>Redirecting...</title>
             </head>
             <body>
