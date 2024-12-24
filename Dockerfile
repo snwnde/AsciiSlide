@@ -5,9 +5,10 @@ RUN apk add --quiet --no-cache --update make \
      && fc-cache -f
 # Copy app
 COPY --chown=asciidoctor:asciidoctor asciislide /asciislide
-# Set volumes
+# Volumes to be mounted
 VOLUME /asciislide/src
+VOLUME /asciislide/build
 # Set user as the upstream image does
 USER asciidoctor
 WORKDIR /asciislide
-ENTRYPOINT ["sh"]
+ENTRYPOINT ["sh", "-c"]
