@@ -87,29 +87,33 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: docker-image
-
       - 
         name: Load Docker image
         run: docker load -i image.tar
       - 
+        name: Checkout code
+        uses: actions/checkout@v3
+      - 
         name: Run example build with Docker
-        run: |
-          mkdir -p ${{ github.workspace }}/build
-          docker run --rm \
-            -v ${{ github.workspace }}/example:/asciislide/src/example \
-            -v ${{ github.workspace }}/build:/asciislide/build \
-            ${{ env.IMAGE_NAME }}:latest /bin/sh -c "make"
-
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ${{ env.IMAGE_NAME }}:latest
+          options: -v ${{ github.workspace }}/example:/asciislide/src/example -v ${{ github.workspace }}/build:/asciislide/build -u root
+          run: |
+            make
       - 
         name: Upload example artifact
         uses: actions/upload-artifact@v3
         with:
           name: example-build
           path: ${{ github.workspace }}/build/example
+          if-no-files-found: error
 
   deploy-example:
     runs-on: ubuntu-latest
     needs: build-example
+    permissions:
+      contents: write
 
     steps:
       - 

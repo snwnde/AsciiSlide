@@ -7,7 +7,6 @@ RUN apk add --quiet --no-cache --update make \
 COPY --chown=asciidoctor:asciidoctor asciislide /asciislide
 # Volumes to be mounted
 VOLUME /asciislide/src
-VOLUME /asciislide/build
 # Set user as the upstream image does
 USER asciidoctor
 WORKDIR /asciislide
