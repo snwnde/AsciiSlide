@@ -70,13 +70,14 @@ const sectionTitle = (node) => {
   const parts = node.getTitle().split(titleSeparator)
   const main = parts[0]
   const subtitle = parts[1]
+  const level = node.getLevel()
   if (subtitle) {
     return `<header>
-  <h2>${main}</h2>
-  <h3>${subtitle}</h3>
+  <h${level + 1}>${main}</h${level + 1}>
+  <h${level + 2}>${subtitle}</h${level + 2}>
 </header>`
   }
-  return `<h2>${node.getTitle()}</h2>`
+  return `<h${level + 1}>${node.getTitle()}</h${level + 1}>`
 }
 
 const sectionRoles = (node) => {
