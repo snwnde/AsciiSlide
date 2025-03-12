@@ -38,6 +38,7 @@ const titleSlide = (node) => {
   <footer>
     <p class="author">${node.getDocument().getAuthor()}</p>
     <p class="institute">${node.getDocument().getAttribute("institute")}</p>
+    <p class="collaborators">${node.getDocument().getAttribute("collaborators")}</p>
   </footer>
 </section>`
 }
