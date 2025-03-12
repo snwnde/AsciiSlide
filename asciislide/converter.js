@@ -140,9 +140,10 @@ function image(node) {
   }
   const width = node.getAttribute('width')
   const figcaption = node.getAttribute('figcaption') || ''
+  const figcap = figcaption ? `<figcaption>${figcaption}</figcaption>` : ''
   const roleClass = roles.length > 0 ? `image ${roles.join(' ')}` : 'image'
   return `<figure class="${roleClass}"><img src="${node.getImageUri(node.getAttribute('target'))}" width="${width}"/>
-    <figcaption>${figcaption}</figcaption>
+    ${figcap}
     </figure>`
 }
 
