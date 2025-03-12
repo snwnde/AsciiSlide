@@ -138,10 +138,10 @@ function image(node) {
   if (roles && roles.includes('canvas')) {
     return ''
   }
-  const height = node.getAttribute('height')
   const width = node.getAttribute('width')
   const figcaption = node.getAttribute('figcaption') || ''
-  return `<figure class="image ${node.getRoles().join(' ')}"><img src="${node.getImageUri(node.getAttribute('target'))}" height="${height}" width="${width}"/>
+  const roleClass = roles.length > 0 ? `image ${roles.join(' ')}` : 'image'
+  return `<figure class="${roleClass}"><img src="${node.getImageUri(node.getAttribute('target'))}" width="${width}"/>
     <figcaption>${figcaption}</figcaption>
     </figure>`
 }

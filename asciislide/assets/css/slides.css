@@ -168,3 +168,13 @@ td.content {
   font-family: "Lato";
   font-size: 20px;
 }
+
+figure.image {
+  text-align: center;
+  margin: 0;
+}
+
+figure.image img {
+  max-width: 100%;
+  height: auto;
+}
