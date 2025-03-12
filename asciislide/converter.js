@@ -139,12 +139,13 @@ function image(node) {
     return ''
   }
   const width = node.getAttribute('width')
+  const widthStyle = width ? ` width=${width}` : ''
+  const height = node.getAttribute('height')
+  const heightStyle = height ? ` height=${height}` : ''
   const figcaption = node.getAttribute('figcaption') || ''
   const figcap = figcaption ? `<figcaption>${figcaption}</figcaption>` : ''
   const roleClass = roles.length > 0 ? `image ${roles.join(' ')}` : 'image'
-  return `<figure class="${roleClass}"><img src="${node.getImageUri(node.getAttribute('target'))}" width="${width}"/>
-    ${figcap}
-    </figure>`
+  return `<figure class="${roleClass}"><img src="${node.getImageUri(node.getAttribute('target'))}"${widthStyle}${heightStyle}/>${figcap}</figure>`
 }
 
 module.exports = {

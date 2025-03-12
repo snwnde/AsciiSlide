@@ -137,12 +137,13 @@ h3 {
 }
 
 .columns-2 {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
 }
 
 .columns-2>* {
-  flex: 0 0 50%;
-  padding-right: 2rem;
+  padding: 1rem;
 }
 
 .exampleblock.column>.content {
