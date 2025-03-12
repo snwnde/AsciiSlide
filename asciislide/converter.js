@@ -101,7 +101,11 @@ const elementId = (node) => {
 
 function paragraph(node) { return `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>` }
 function section(node) {
-  return `<section class="${sectionRoles(node).join(' ')} ${node.getTitle() === '!' ? 'no-title' : ''}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
+  if (node.getLevel() !== 1) {
+    return `${sectionTitle(node)}
+    ${node.getContent()}`;
+  }
+  return `<section class="${sectionRoles(node).join(' ')}${node.getTitle() === '!' ? 'no-title' : ''}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
   ${sectionTitle(node)}
   ${node.getContent()}
 </section>`
