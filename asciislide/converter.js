@@ -105,7 +105,8 @@ function section(node) {
     return `${sectionTitle(node)}
     ${node.getContent()}`;
   }
-  return `<section class="${sectionRoles(node).join(' ')}${node.getTitle() === '!' ? 'no-title' : ''}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
+  const noTitleToggle = node.getTitle() === '!' ? ' no-title' : ''
+  return `<section class="${sectionRoles(node).join(' ')}${noTitleToggle}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
   ${sectionTitle(node)}
   ${node.getContent()}
 </section>`
