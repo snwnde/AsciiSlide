@@ -71,7 +71,7 @@ def hello():
 
 == A slide with image
 An image can be included in a slide.
-[.columns-2]
+[.columns.w1-1]
 --
 [.column]
 image::example.png[width=100%]
@@ -88,7 +88,7 @@ The previous slide is an example of a slide with two columns.
 ----
 == A slide with image
 An image can be included in a slide.
-[.columns-2]
+[.columns.w1-1]
 --
 [.column]
 image::example.png[width=100%]

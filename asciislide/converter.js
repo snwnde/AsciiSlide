@@ -31,14 +31,20 @@ const titleSliderHeader = (node) => {
 }
 
 const titleSlide = (node) => {
+  const author = node.getDocument().getAuthor() || ''
+  const institute = node.getDocument().getAttribute('institute') || ''
+  const collaborators = node.getDocument().getAttribute('collaborators') || ''
+  const authorFooter = author ? `<p class="author">${author}</p>` : ''
+  const instituteFooter = institute ? `<p class="institute">${institute}</p>` : ''
+  const collaboratorsFooter = collaborators ? `<p class="collaborators">${collaborators}</p>` : ''
   return `<section class="title slide">
   <header>
     ${titleSliderHeader(node)}
   </header>
   <footer>
-    <p class="author">${node.getDocument().getAuthor()}</p>
-    <p class="institute">${node.getDocument().getAttribute("institute")}</p>
-    <p class="collaborators">${node.getDocument().getAttribute("collaborators")}</p>
+  ${authorFooter}
+  ${instituteFooter}
+  ${collaboratorsFooter}
   </footer>
 </section>`
 }
