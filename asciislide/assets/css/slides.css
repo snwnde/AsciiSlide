@@ -136,14 +136,25 @@ h3 {
   content: ''
 }
 
-.columns-2 {
+.columns {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.columns-2>* {
+.columns>* {
   padding: 1rem;
+}
+
+.columns.w1-1 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.columns.w1-2 {
+  grid-template-columns: 1fr 2fr;
+}
+
+.columns.w2-1 {
+  grid-template-columns: 2fr 1fr;
 }
 
 .exampleblock.column>.content {
