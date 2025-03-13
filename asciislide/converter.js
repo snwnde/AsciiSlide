@@ -61,7 +61,7 @@ const sectionInlineStyle = (node) => {
     } else {
       backgroundSize = 'cover'
     }
-    return `style="background-image: url(${node.getImageUri(image.getAttribute('target'))}); background-size: ${backgroundSize}; background-repeat: no-repeat"`
+    return ` style="background-image: url(${node.getImageUri(image.getAttribute('target'))}); background-size: ${backgroundSize}; background-repeat: no-repeat"`
   }
   return ''
 }
@@ -99,6 +99,39 @@ const elementId = (node) => {
   return ''
 }
 
+function hasNoPaginationAttribute(block) {
+  // Check if the block has attributes and $$smap within attributes
+  if (
+    block.attributes &&
+    block.attributes.$$smap &&
+    block.attributes.$$smap.role
+  ) {
+    // Split the role string by spaces and check if 'no-pagination' is one of the elements
+    return block.attributes.$$smap.role.split(" ").includes("no-pagination");
+  }
+  return false;
+}
+
+function calculateTotalPages(node) {
+  let totalPages = 0;
+  node.parent.blocks.forEach((block) => {
+    if (!hasNoPaginationAttribute(block)) {
+      totalPages++;
+    }
+  });
+  return totalPages;
+}
+
+function calculatePageNumber(node) {
+  let noPaginationNumber = 0;
+  node.parent.blocks.forEach((block) => {
+    if (hasNoPaginationAttribute(block) && block.index < node.index) {
+      noPaginationNumber++;
+    }
+  });
+  return node.index - noPaginationNumber + 1;
+}
+
 function paragraph(node) { return `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>` }
 function section(node) {
   if (node.getLevel() !== 1) {
@@ -106,7 +139,9 @@ function section(node) {
     ${node.getContent()}`;
   }
   const noTitleToggle = node.getTitle() === '!' ? ' no-title' : ''
-  return `<section class="${sectionRoles(node).join(' ')}${noTitleToggle}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
+  const slideNum = ` data-slide-number="${calculatePageNumber(node)}"`
+  const slideCount = ` data-slide-count="${calculateTotalPages(node)}"`
+  return `<section class="${sectionRoles(node).join(' ')}${noTitleToggle}"${slideNum}${slideCount}${sectionInlineStyle(node)}>
   ${sectionTitle(node)}
   ${node.getContent()}
 </section>`
