@@ -146,11 +146,11 @@ h3 {
 
 .columns {
   display: grid;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .columns>* {
-  padding: 1rem;
+  padding: 0rem;
 }
 
 .columns.w1-1 {
