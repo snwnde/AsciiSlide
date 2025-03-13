@@ -118,6 +118,14 @@ h3 {
   color: #FFB703;
 }
 
+.slide.title div.admonitionblock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto; /* Center the div horizontally */
+}
+
 .slide::after {
   content: attr(data-slide-number) "/" attr(data-slide-count);
   counter-increment: slide;
