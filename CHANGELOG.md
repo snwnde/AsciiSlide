@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.2 - 2025-11-07
+#### Bug Fixes
+- url - (c821e57) - Sen-wen Deng
+
+- - -
+
 ## 0.2.1 - 2025-11-07
 #### Features
 - robust js path - (af5c8a8) - Sen-wen Deng
