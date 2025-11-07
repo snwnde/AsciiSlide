@@ -7,7 +7,6 @@ Create presentation slides with AsciiDoc.
 
 - PDF: link:https://snwnde.github.io/AsciiSlide/example/html/main.pdf[example.pdf]
 - HTML: link:https://snwnde.github.io/AsciiSlide/example/html/main.html[example.html]
-    * TODO: presentation mode
 
 == Usage
 

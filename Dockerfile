@@ -1,7 +1,7 @@
 FROM ggrossetie/asciidoctor-web-pdf:1.0.0-alpha.16
 # Install make
 USER root
-RUN apk add --quiet --no-cache --update make \
+RUN apk add --quiet --no-cache --update make patch \
      && fc-cache -f
 # Copy app
 COPY --chown=asciidoctor:asciidoctor asciislide /asciislide

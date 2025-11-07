@@ -1,5 +1,5 @@
 const { isAbsolute, join } = require('path');
-const defaultAssetsDir = `../../assets/css`
+const defaultCSSDir = `../../assets/css`
 
 const customStyleDir = (node) => {
   const stylesDirectory = node.getAttribute('stylesdir')
@@ -9,7 +9,7 @@ const customStyleDir = (node) => {
     }
     return join(node.getDocument().getBaseDir(), stylesDirectory)
   }
-  return defaultAssetsDir
+  return defaultCSSDir
 }
 
 const customStyleContent = (node) => {
@@ -147,7 +147,8 @@ function section(node) {
   const noTitleToggle = node.getTitle() === '!' ? ' no-title' : ''
   const slideNum = ` data-slide-number="${calculatePageNumber(node)}"`
   const slideCount = ` data-slide-count="${calculateTotalPages(node)}"`
-  return `<section class="${sectionRoles(node).join(' ')}${noTitleToggle}"${slideNum}${slideCount}${sectionInlineStyle(node)}>
+  const slideTransition = ` transition="${node.getAttribute('transition') || node.getDocument().getAttribute('slide-transion') || 'zoom'}"`
+  return `<section class="${sectionRoles(node).join(' ')}${noTitleToggle}"${slideTransition}${slideNum}${slideCount}${sectionInlineStyle(node)}>
   ${sectionTitle(node)}
   ${node.getContent()}
 </section>`
@@ -157,7 +158,7 @@ function document(node) {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="${defaultAssetsDir}/asciidoctor.css" rel="stylesheet">
+<link href="${defaultCSSDir}/asciidoctor.css" rel="stylesheet">
 <link rel="stylesheet" href="${customStyleContent(node)}" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
