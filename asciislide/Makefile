@@ -22,7 +22,7 @@ $(BUILD_DIR)/%.html: $(SRC_DIR)/%.adoc
 	@/usr/bin/asciidoctor-web-pdf $? --template-require ./converter.js -D $(dir $@)
 	@echo "Moving the html file as well..."
 	@mv $(subst .adoc,.html,$?) $@
-	@patch $@ -p0 < ./posthtml.patch
+	@sed -i '/<!-- <script src=.*presentation\.js.*><\/script> -->/s/<!-- //; s/ -->//' $@
 	@echo "Done!"
 
 $(BUILD_DIR)/%: $(SRC_DIR)/%

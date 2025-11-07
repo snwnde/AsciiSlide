@@ -1,5 +1,5 @@
 const { isAbsolute, join } = require('path');
-const defaultCSSDir = `../../assets/css`
+const defaultStyleDir = `../../assets`
 
 const customStyleDir = (node) => {
   const stylesDirectory = node.getAttribute('stylesdir')
@@ -9,11 +9,11 @@ const customStyleDir = (node) => {
     }
     return join(node.getDocument().getBaseDir(), stylesDirectory)
   }
-  return defaultCSSDir
+  return defaultStyleDir
 }
 
 const customStyleContent = (node) => {
-  const stylesheet = node.getAttribute('stylesheet') || `slides.css`
+  const stylesheet = node.getAttribute('stylesheet') || join(`css`, `slides.css`)
   if (isAbsolute(stylesheet)) {
     return stylesheet
   }
@@ -158,7 +158,7 @@ function document(node) {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="${defaultCSSDir}/asciidoctor.css" rel="stylesheet">
+<link href="${customStyleDir(node)}/css/asciidoctor.css" rel="stylesheet">
 <link rel="stylesheet" href="${customStyleContent(node)}" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,6 +173,7 @@ ${node.getContent()}
 hljs.initHighlightingOnLoad();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<!-- <script src="${customStyleDir(node)}/js/presentation.js" defer></script> -->
 </body>`
 }
 function open(node) { return `<div${elementId(node)} class="${node.getRoles().join(' ')}">${node.getContent()}</div>` }
