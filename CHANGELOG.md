@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.0 - 2025-11-07
+#### Features
+- html presentation - (39d7e27) - Sen-wen Deng
+
+- - -
+
 ## 0.1.0 - 2025-11-06
 #### Bug Fixes
 - frontpage & example - (d0c9c4f) - Sen-wen Deng
