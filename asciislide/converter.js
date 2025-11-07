@@ -1,16 +1,23 @@
-const { isAbsolute, join } = require('path');
-const defaultStyleDir = `../../assets`
+const { join, isAbsolute } = require('path');
+const { URL } = require('url');
+const defaultStyleDir = `../../assets/`
 
 const customStyleDir = (node) => {
-  const stylesDirectory = node.getAttribute('stylesdir')
+  const stylesDirectory = node.getAttribute('stylesdir');
   if (stylesDirectory) {
-    if (isAbsolute(stylesDirectory)) {
-      return stylesDirectory
+    try {
+      const url = new URL(stylesDirectory);
+      return url.href;
+    } catch (_) {
+      if (isAbsolute(stylesDirectory)) {
+        return stylesDirectory;
+      }
+      return join(node.getDocument().getBaseDir(), stylesDirectory);
     }
-    return join(node.getDocument().getBaseDir(), stylesDirectory)
   }
-  return defaultStyleDir
-}
+  return defaultStyleDir;
+};
+
 
 const customStyleContent = (node) => {
   const stylesheet = node.getAttribute('stylesheet') || join(`css`, `slides.css`)
@@ -18,7 +25,12 @@ const customStyleContent = (node) => {
     return stylesheet
   }
   let start = customStyleDir(node)
-  return join(start, stylesheet)
+  return start + stylesheet
+}
+
+const customScriptContent = (node) => {
+  let start = customStyleDir(node)
+  return start + join(`js`, `presentation.js`)
 }
 
 const titleSliderHeader = (node) => {
@@ -173,7 +185,7 @@ ${node.getContent()}
 hljs.initHighlightingOnLoad();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
-<!-- <script src="${customStyleDir(node)}/js/presentation.js" defer></script> -->
+<!-- <script src="${customScriptContent(node)}" defer></script> -->
 </body>`
 }
 function open(node) { return `<div${elementId(node)} class="${node.getRoles().join(' ')}">${node.getContent()}</div>` }

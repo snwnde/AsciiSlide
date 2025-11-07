@@ -103,18 +103,18 @@ ol {
   padding-right: 5px;
 }
 
-pre {
+/* pre {
   background: rgba(3, 7, 18, 0.5);
   padding: 12px 14px;
   border-radius: 8px;
   font-family: var(--mono);
   color: var(--fg);
   overflow: auto;
-}
+} */
 
-strong {
+/* strong {
   color: var(--accent);
-}
+} */
 
 html {
   font-size: 16pt;
