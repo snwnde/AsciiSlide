@@ -103,21 +103,8 @@ ol {
   padding-right: 5px;
 }
 
-/* pre {
-  background: rgba(3, 7, 18, 0.5);
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-family: var(--mono);
-  color: var(--fg);
-  overflow: auto;
-} */
-
-/* strong {
-  color: var(--accent);
-} */
-
 html {
-  font-size: 16pt;
+  font-size: 15pt;
   height: 100%;
   margin: 0;
   background: var(--bg);
@@ -125,6 +112,13 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+
+@media screen and (min-width: 1280px) {
+  .literalblock pre,
+  .listingblock > .content > pre {
+    font-size: 0.90625em!important;
+  }
 }
 
 .slides {
@@ -175,6 +169,7 @@ h4 {
 h2 {
   margin: 0 0 12px 0;
   font-weight: 400;
+  font-size: 2.3125em!important;
 }
 
 h3 {
@@ -212,6 +207,7 @@ h3 {
   font-family: "Alegreya SC";
   text-align: center;
   font-size: 1.5rem;
+  color: var(--accent-2);
 }
 
 .slide.title>footer>p.institute {
@@ -322,23 +318,4 @@ figure.image {
 figure.image img {
   max-width: 100%;
   height: auto;
-}
-
-@media (max-width:700px) {
-  .slide h1 {
-    font-size: 28px;
-  }
-
-  .slide {
-    padding: 32px;
-  }
-
-  .slide p {
-    max-width: 100%;
-    font-size: 14px;
-  }
-
-  .slide img {
-    max-width: 100%;
-  }
 }

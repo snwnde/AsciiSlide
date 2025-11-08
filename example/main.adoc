@@ -39,14 +39,14 @@ Write LaTeX-style equations using the `stem` block:
 [.column]
 [stem]
 ++++
-    E = mc^2
+E = mc^2
 ++++
 [.column]
 [source,asciidoc]
 ----
 [stem]
 ++++
-    E = mc^2
+E = mc^2
 ++++
 ----
 --
