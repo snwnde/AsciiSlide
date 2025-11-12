@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.4 - 2025-11-12
+#### Bug Fixes
+- consistency - (d331774) - Sen-wen Deng
+
+- - -
+
 ## 0.2.3 - 2025-11-08
 #### Bug Fixes
 - fontsize - (b74831b) - Sen-wen Deng
