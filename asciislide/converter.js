@@ -42,24 +42,6 @@ const titleSliderHeader = (node) => {
   return `<h1>${node.getDocumentTitle()}</h1>`
 }
 
-const titleSlide = (node) => {
-  const author = node.getDocument().getAuthor() || ''
-  const institute = node.getDocument().getAttribute('institute') || ''
-  const collaborators = node.getDocument().getAttribute('collaborators') || ''
-  const authorFooter = author ? `<p class="author">${author}</p>` : ''
-  const instituteFooter = institute ? `<p class="institute">${institute}</p>` : ''
-  const collaboratorsFooter = collaborators ? `<p class="collaborators">${collaborators}</p>` : ''
-  return `<section class="title slide">
-  <header>
-    ${titleSliderHeader(node)}
-  </header>
-  <footer>
-  ${authorFooter}
-  ${instituteFooter}
-  ${collaboratorsFooter}
-  </footer>
-</section>`
-}
 
 const getImageCanvas = (node) => {
   const images = node.findBy({ context: 'image', role: 'canvas' })
@@ -82,6 +64,28 @@ const sectionInlineStyle = (node) => {
     return ` style="background-image: url(${node.getImageUri(image.getAttribute('target'))}); background-size: ${backgroundSize}; background-repeat: no-repeat"`
   }
   return ''
+}
+
+const titleSlide = (node) => {
+  const author = node.getDocument().getAuthor() || ''
+  const institute = node.getDocument().getAttribute('institute') || ''
+  const collaborators = node.getDocument().getAttribute('collaborators') || ''
+  const background = node.getDocument().getAttribute('title-background') || ''
+  const authorFooter = author ? `<p class="author">${author}</p>` : ''
+  const instituteFooter = institute ? `<p class="institute">${institute}</p>` : ''
+  const collaboratorsFooter = collaborators ? `<p class="collaborators">${collaborators}</p>` : ''
+  const titleBgStyle = background ? ` style="background-image: url(${node.getImageUri(background)}); background-size: cover; background-repeat: no-repeat"` : ''
+
+  return `<section class="title slide"${titleBgStyle}>
+  <header>
+    ${titleSliderHeader(node)}
+  </header>
+  <footer>
+  ${authorFooter}
+  ${instituteFooter}
+  ${collaboratorsFooter}
+  </footer>
+</section>`
 }
 
 const sectionTitle = (node) => {

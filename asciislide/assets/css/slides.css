@@ -218,20 +218,20 @@ h3 {
   font-family: "Alegreya SC";
   text-align: center;
   font-size: 1.5rem;
-  color: var(--accent-2);
+  color: var(--theme);
 }
 
 .slide.title>footer>p.institute {
   font-family: "Yanone Kaffeesatz";
-  text-align: center;
+  text-align: right;
   font-size: 1.3rem;
 }
 
 .slide.title>footer>p.collaborators {
   font-family: "Yanone Kaffeesatz";
-  text-align: center;
+  text-align: right;
   font-size: 1.2rem;
-  color: var(--muted);
+  color: var(--theme);
 }
 
 .slide.title>footer {
