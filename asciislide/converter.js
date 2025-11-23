@@ -71,19 +71,23 @@ const titleSlide = (node) => {
   const institute = node.getDocument().getAttribute('institute') || ''
   const collaborators = node.getDocument().getAttribute('collaborators') || ''
   const background = node.getDocument().getAttribute('title-background') || ''
-  const authorFooter = author ? `<p class="author">${author}</p>` : ''
-  const instituteFooter = institute ? `<p class="institute">${institute}</p>` : ''
-  const collaboratorsFooter = collaborators ? `<p class="collaborators">${collaborators}</p>` : ''
+  const footnote = node.getDocument().getAttribute('footnote') || ''
+  const authorHeader = author ? `<p class="author">${author}</p>` : ''
+  const instituteHeader = institute ? `<p class="institute">${institute}</p>` : ''
+  const footnoteFooter = footnote ? `<p class="footnote">${footnote}</p>` : ''
+  const collaboratorsHeader = collaborators ? `<p class="collaborators">${collaborators}</p>` : ''
+  
   const titleBgStyle = background ? ` style="background-image: url(${node.getImageUri(background)}); background-size: cover; background-repeat: no-repeat"` : ''
 
   return `<section class="title slide"${titleBgStyle}>
   <header>
     ${titleSliderHeader(node)}
+    ${authorHeader}
+    ${instituteHeader}
+    ${collaboratorsHeader}
   </header>
   <footer>
-  ${authorFooter}
-  ${instituteFooter}
-  ${collaboratorsFooter}
+    ${footnoteFooter}
   </footer>
 </section>`
 }

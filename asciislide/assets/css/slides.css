@@ -214,27 +214,39 @@ h3 {
   bottom: 10px;
 }
 
-.slide.title>footer>p.author {
+.slide.title>footer {
+  position: absolute;
+  right: 30px;
+  bottom: 40px;
+  font-weight: 500;
+  font-family: "Lato";
+}
+
+.slide.title>footer>p.footnote {
+  text-align: right;
+}
+
+.slide.title>header>p.author {
   font-family: "Alegreya SC";
   text-align: center;
   font-size: 1.5rem;
   color: var(--theme);
 }
 
-.slide.title>footer>p.institute {
+.slide.title>header>p.institute {
   font-family: "Yanone Kaffeesatz";
   text-align: right;
   font-size: 1.3rem;
 }
 
-.slide.title>footer>p.collaborators {
+.slide.title>header>p.collaborators {
   font-family: "Yanone Kaffeesatz";
   text-align: right;
   font-size: 1.2rem;
   color: var(--theme);
 }
 
-.slide.title>footer {
+.slide.title>header {
   position: relative;
   right: auto;
   bottom: auto;
@@ -257,6 +269,7 @@ h3 {
   bottom: 1.25rem;
   right: 3.75rem;
   line-height: 1.9;
+  color: var(--muted);
 }
 
 .slide.title::after {
