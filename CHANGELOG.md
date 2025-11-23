@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.6 - 2025-11-23
+#### Bug Fixes
+- title page footer - (08ee1d9) - Sen-wen Deng
+
+- - -
+
 ## 0.2.5 - 2025-11-13
 #### Features
 - cover image - (132fe8d) - Sen-wen Deng
