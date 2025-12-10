@@ -1,3 +1,10 @@
+# Updated workflow for AsciiSlide: build multi-arch image, and produce a local single-arch image artifact for testing.
+# Key changes:
+# - Set up QEMU so the runner can cross-build arm64.
+# - Use buildx to push multi-arch manifests (platforms: linux/amd64,linux/arm64/v8).
+# - Remove the single `load: true` from the push step (that caused missing platform metadata).
+# - Add a separate local build (load: true) that builds/loads a single-arch image for the runner and is saved/uploaded as an artifact for downstream testing.
+# - Keep push conditional on tag pushes (same as original).
 name: Build, Push and Deploy
 
 on:
@@ -35,8 +42,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up QEMU (enable emulation for cross-platform builds)
+        uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Docker meta
         id: meta
@@ -66,16 +76,42 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
-      - name: Build and push
+      - name: Build and push multi-platform image
+        if: github.ref_type == 'tag'
+        id: build-push-multi
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ github.ref_type == 'tag' }} # Push only when it's a tag push
-          load: true
+          file: ./Dockerfile
+          push: ${{ github.ref_type == 'tag' }}
+          platforms: linux/amd64,linux/arm64/v8
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+
+      - name: Pull published image and save (tag push)
+        if: github.ref_type == 'tag'
+        run: |
+          # pick first tag from metadata-action (canonical tag)
+          IFS=$'\n' read -r -a TAGS <<< "${{ steps.meta.outputs.tags }}"
+          IMAGE_TAG="${TAGS[0]}"
+          echo "Pulling ${IMAGE_TAG}"
+          docker pull "${IMAGE_TAG}"
+          docker tag "${IMAGE_TAG}" "${{ env.IMAGE_NAME }}:latest"
+          docker save -o image.tar "${{ env.IMAGE_NAME }}:latest"
+
+      - name: Build and load local image for downstream
+        if: github.ref_type != 'tag'
+        id: build-load-local
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          load: true
+          tags: ${{ env.IMAGE_NAME }}:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
       - name: Save Docker image
         run: docker save -o image.tar ${{ env.IMAGE_NAME }}:latest
