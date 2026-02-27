@@ -142,22 +142,19 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ${{ env.IMAGE_NAME }}:latest
-          options: -v ${{ github.workspace }}/example:/asciislide/src/example -v ${{ github.workspace }}/public:/asciislide/build -u root
+          options: -v ${{ github.workspace }}/example:/asciislide/src -v ${{ github.workspace }}/public:/asciislide/public -u root
           run: |
-            make
-            cp -r assets build/assets
-            mv build/example build/_example
-            mkdir -p build/example/html
-            cp -r build/_example/* build/example/html
-            rm -rf build/_example
+            PUPPETEER_NAVIGATION_TIMEOUT=300000 make
+            mv build public/example
+            cp -r assets public/assets
             echo '<!DOCTYPE html>
             <html lang="en">
             <head>
-                <meta http-equiv="refresh" content="0; url=./example/html/main.html">
+                <meta http-equiv="refresh" content="0; url=./example/main.html">
                 <title>Redirecting...</title>
             </head>
             <body>
-                <p>If you are not redirected automatically, follow this <a href="./example/html/main.html">link to main.html</a>.</p>
+                <p>If you are not redirected automatically, follow this <a href="./example/main.html">link to main.html</a>.</p>
             </body>
             </html>' > build/index.html
 

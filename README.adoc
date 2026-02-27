@@ -5,8 +5,8 @@ Create presentation slides with AsciiDoc.
 
 == Example
 
-- PDF: link:https://snwnde.github.io/AsciiSlide/example/html/main.pdf[example.pdf]
-- HTML: link:https://snwnde.github.io/AsciiSlide/example/html/main.html[example.html]
+- PDF: link:https://snwnde.github.io/AsciiSlide/example/main.pdf[example.pdf]
+- HTML: link:https://snwnde.github.io/AsciiSlide/example/main.html[example.html]
 
 == Usage
 

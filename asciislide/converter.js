@@ -1,6 +1,6 @@
 const { join, isAbsolute } = require('path');
 const { URL } = require('url');
-const defaultStyleDir = `../../assets/`
+const defaultStyleDir = `../assets/`
 
 const customStyleDir = (node) => {
   const stylesDirectory = node.getAttribute('stylesdir');
