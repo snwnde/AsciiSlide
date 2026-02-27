@@ -156,7 +156,7 @@ jobs:
             <body>
                 <p>If you are not redirected automatically, follow this <a href="./example/main.html">link to main.html</a>.</p>
             </body>
-            </html>' > build/index.html
+            </html>' > public/index.html
 
       - name: Upload example artifact
         uses: actions/upload-artifact@v4

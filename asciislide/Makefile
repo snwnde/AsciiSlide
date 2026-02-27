@@ -6,12 +6,12 @@ export LC_CTYPE=en_US.UTF-8
 SRC_DIR = src
 BUILD_DIR = build
 
-SRC_FILES := $(shell cd ${SRC_DIR} && find . -maxdepth 2 -name '*.adoc')
+SRC_FILES := $(shell cd ${SRC_DIR} && find . -maxdepth 1 -name '*.adoc')
 HTML_FILES := $(SRC_FILES:%.adoc=$(BUILD_DIR)/%.html)
 
-OUT_IMG = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/*/images/*))
-OUT_CSS = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/*/assets/css/*))
-OUT_JS = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/*/assets/js/*))
+OUT_IMG = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/images/*))
+OUT_CSS = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/assets/css/*))
+OUT_JS = $(patsubst ${SRC_DIR}/%,${BUILD_DIR}/%,$(wildcard ${SRC_DIR}/assets/js/*))
 
 .PHONY: all
 all: $(HTML_FILES) $(OUT_IMG) $(OUT_CSS) $(OUT_JS)
