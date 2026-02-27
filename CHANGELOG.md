@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.9 - 2026-02-27
+#### Bug Fixes
+- pos and path - (41c6913) - Senwen Deng
+
+- - -
+
 ## 0.2.8 - 2026-02-27
 #### Performance Improvements
 - better default style sheet path - (09aacb4) - Senwen Deng
