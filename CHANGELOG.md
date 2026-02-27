@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.8 - 2026-02-27
+#### Performance Improvements
+- better default style sheet path - (09aacb4) - Senwen Deng
+
+- - -
+
 ## 0.2.7 - 2025-12-10
 #### Bug Fixes
 - multiarch - (ddc7fda) - Sen-wen Deng
