@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="../assets//css/asciidoctor.css" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/slides.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
+<body>
+<section class="title slide">
+  <header>
+    <h1>Example Presentation</h1>
+    <p class="author">Jane Doe</p>
+    <p class="institute">XYZ Institute</p>
+    
+  </header>
+  <footer>
+    
+  </footer>
+</section>
+<section class="slide" transition="zoom" data-slide-number="1" data-slide-count="7">
+  <h2>Features</h2>
+  <div class="ulist">
+<ul>
+<li>
+<p>Simple and clean syntax based on <a href="https://asciidoc.org/">AsciiDoc</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Support for LaTeX-style equations</p>
+</li>
+<li>
+<p>Code highlighting and image inclusion</p>
+</li>
+<li>
+<p>HTML rendering</p>
+</li>
+<li>
+<p>Source code readbility</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Based on web standards</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Write HTML if you want</p>
+</li>
+<li>
+<p>Customizable with CSS</p>
+</li>
+<li>
+<p>Output to both HTML and PDF</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section class="slide" transition="zoom" data-slide-number="2" data-slide-count="7">
+  <h2>A slide</h2>
+  <p class="">A slide is a level 2 section in AsciiDoc.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">== Your slide title
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+erat, sed diam voluptua.</code></pre>
+</div>
+</div>
+<p class="">Write LaTeX-style equations using the <code>stem</code> block:</p>
+<div class="columns-2"><div class="stemblock column">
+<div class="content">
+\[E = mc^2\]
+</div>
+</div>
+<div class="listingblock column">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">[stem]
+++++
+E = mc^2
+++++</code></pre>
+</div>
+</div></div>
+</section>
+<section class="slide" transition="zoom" data-slide-number="3" data-slide-count="7">
+  <h2>A slide with code block</h2>
+  <p class="">The source code is <strong>highlighted</strong> in the code block.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">def hello():
+    print('Hello, world!')</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">[source,python]
+----ㅤ
+def hello():
+    print('Hello, world!')
+----ㅤ</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" transition="zoom" data-slide-number="4" data-slide-count="7">
+  <h2>A slide with image</h2>
+  <p class="">An image can be included in a slide.</p>
+<div class="columns w1-1"><figure class="image column"><img src="images/example.png" width=100%/></figure>
+<div class="listingblock column">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">image::example.png[width=100%]</code></pre>
+</div>
+</div></div>
+</section>
+<section class="slide" transition="zoom" data-slide-number="5" data-slide-count="7">
+  <h2>A slide with two columns</h2>
+  <p class="">The previous slide is an example of a slide with two columns.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">== A slide with image
+An image can be included in a slide.
+[.columns.w1-1]
+--
+[.column]
+image::example.png[width=100%]
+[.column]
+[source,asciidoc]
+----ㅤ
+image::example.png[width=100%]
+----ㅤ</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" transition="zoom" data-slide-number="6" data-slide-count="7">
+  <h2>Write HTML</h2>
+  <p class="">You can write and render HTML in a slide.</p>
+<div class="gallery">
+    <h3 style="text-align: center;">Image Gallery</h3>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 1" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 2" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 3" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+        <div style="margin: 10px;">
+            <img src="images/example.png" alt="Image 4" style="width: 150px; height: 150px; border-radius: 8px;"/>
+        </div>
+    </div>
+</div>
+</section>
+<section class="slide" transition="zoom" data-slide-number="7" data-slide-count="7">
+  <h2>Configuration</h2>
+  <p class="">Define the presentation settings at the header of the file.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-asciidoc" data-lang="asciidoc">= Example Presentation
+:author: Jane Doe
+:email: jane.doe@example.org
+:lang: en
+:toc!:
+:stylesdir: path/to/styles
+:stylesheet: custom.css
+:stem: latex
+:icons: font
+:imagesdir: images
+:institute: XYZ Institute</code></pre>
+</div>
+</div>
+</section>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<script src="../assets/js/presentation.js" defer></script>
+</body>
