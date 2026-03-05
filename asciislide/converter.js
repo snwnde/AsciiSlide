@@ -178,22 +178,23 @@ function document(node) {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link href="${customStyleDir(node)}/css/asciidoctor.css" rel="stylesheet">
 <link rel="stylesheet" href="${customStyleContent(node)}" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
-<body>
-${titleSlide(node)}
-${node.getContent()}
-</head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
 <script>
 hljs.initHighlightingOnLoad();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 <!-- <script src="${customScriptContent(node)}" defer></script> -->
+</head>
+<body>
+${titleSlide(node)}
+${node.getContent()}
 </body>`
 }
 function open(node) { return `<div${elementId(node)} class="${node.getRoles().join(' ')}">${node.getContent()}</div>` }
