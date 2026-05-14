@@ -10,7 +10,51 @@ Create presentation slides with AsciiDoc.
 
 == Usage
 
-The working directory being `asciislide`, place the presentation project in the `src` directory:
+=== CI (recommended)
+
+Use the image `ghcr.io/snwnde/asciislide` in your CI pipeline.
+
+Set `ASCIISLIDE_SRC_DIR` to the directory containing the AsciiDoc source files, and `ASCIISLIDE_BUILD_DIR` to the output directory for the generated slides.
+
+Then run `make` inside the container.
+
+
+=== Local (with Docker)
+
+Use Docker locally if you want the same build environment as CI.
+
+Your project typically has the following structure:
+----
+.
+|-- Makefile
+|-- build
+`-- src
+    |-- images
+    `-- main.adoc
+----
+
+Your `Makefile` can look like this:
+
+----
+.PHONY: all clean
+
+all:
+	@docker run --rm \
+		-v ./build:/asciislide/build \
+		-v ./src:/asciislide/src \
+		ghcr.io/snwnde/asciislide make
+
+clean:
+	@rm -rf build/*
+----
+
+Then run `make` to generate the slides in `build`.
+
+=== Local (without Docker)
+
+If you prefer to build locally without Docker, install link:https://github.com/ggrossetie/asciidoctor-web-pdf[asciidoctor-web-pdf] and make sure it is available in your `PATH`.
+
+Clone this repository, change into the `asciislide` directory, and place your AsciiDoc source files in `src`. The layout should look like this:
 
 ----
 .
@@ -19,12 +63,11 @@ The working directory being `asciislide`, place the presentation project in the 
 |-- build
 |-- converter.js
 `-- src
-    `-- example
-        |-- images
-        `-- main.adoc
+    |-- images
+    `-- main.adoc
 ----
 
-Then run `make` to generate the slides in the `build` directory.
+Then run `make` to generate the slides in `build`.
 
 == Inspirations
 

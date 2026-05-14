@@ -1,10 +1,3 @@
-# Updated workflow for AsciiSlide: build multi-arch image, and produce a local single-arch image artifact for testing.
-# Key changes:
-# - Set up QEMU so the runner can cross-build arm64.
-# - Use buildx to push multi-arch manifests (platforms: linux/amd64,linux/arm64/v8).
-# - Remove the single `load: true` from the push step (that caused missing platform metadata).
-# - Add a separate local build (load: true) that builds/loads a single-arch image for the runner and is saved/uploaded as an artifact for downstream testing.
-# - Keep push conditional on tag pushes (same as original).
 name: Build, Push and Deploy
 
 on:
