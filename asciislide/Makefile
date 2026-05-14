@@ -3,8 +3,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 
-SRC_DIR = src
-BUILD_DIR = build
+SRC_DIR ?= src
+BUILD_DIR ?= build
 
 SRC_FILES := $(shell cd ${SRC_DIR} && find . -maxdepth 1 -name '*.adoc')
 HTML_FILES := $(SRC_FILES:%.adoc=$(BUILD_DIR)/%.html)
