@@ -2,6 +2,22 @@ const { join, isAbsolute } = require('path');
 const { URL } = require('url');
 const defaultStyleDir = `../assets/`
 
+const Maybe = (value) => ({
+  value,
+  map: (fn) => Maybe(value != null ? fn(value) : null),
+  getOrElse: (defaultVal) => value != null ? value : defaultVal,
+})
+
+const getAttribute = (obj, path) => {
+  const keys = path.split('.')
+  let current = obj
+  for (const key of keys) {
+    current = current?.[key]
+    if (current == null) return Maybe(null)
+  }
+  return Maybe(current)
+}
+
 const customStyleDir = (node) => {
   const stylesDirectory = node.getAttribute('stylesdir');
   if (stylesDirectory) {
@@ -44,50 +60,50 @@ const titleSliderHeader = (node) => {
 
 
 const getImageCanvas = (node) => {
-  const images = node.findBy({ context: 'image', role: 'canvas' })
-  if (images && images.length > 0) {
-    return images[0]
-  }
-  return undefined
+  return Maybe(node.findBy({ context: 'image', role: 'canvas' }))
+    .map(images => images?.length > 0 ? images[0] : null)
 }
 
 const sectionInlineStyle = (node) => {
-  const image = getImageCanvas(node)
-  if (image) {
-    const roles = node.getRoles()
-    let backgroundSize
-    if (roles && roles.includes('contain')) {
-      backgroundSize = 'contain'
-    } else {
-      backgroundSize = 'cover'
-    }
-    return ` style="background-image: url(${node.getImageUri(image.getAttribute('target'))}); background-size: ${backgroundSize}; background-repeat: no-repeat"`
-  }
-  return ''
+  return getImageCanvas(node)
+    .map(image => {
+      const roles = node.getRoles() || []
+      const backgroundSize = roles.includes('contain') ? 'contain' : 'cover'
+      const backgroundUrl = node.getImageUri(image.getAttribute('target'))
+      return ` style="background-image: url(${backgroundUrl}); background-size: ${backgroundSize}; background-repeat: no-repeat"`
+    })
+    .getOrElse('')
 }
 
+const renderElement = (className, content) =>
+  Maybe(content)
+    .map(value => `<p class="${className}">${value}</p>`)
+    .getOrElse('')
+
+const renderBackgroundStyle = (node, backgroundUrl) =>
+  Maybe(backgroundUrl)
+    .map(bg => ` style="background-image: url(${node.getImageUri(bg)}); background-size: cover; background-repeat: no-repeat"`)
+    .getOrElse('')
+
 const titleSlide = (node) => {
-  const author = node.getDocument().getAuthor() || ''
-  const institute = node.getDocument().getAttribute('institute') || ''
-  const collaborators = node.getDocument().getAttribute('collaborators') || ''
-  const background = node.getDocument().getAttribute('title-background') || ''
-  const footnote = node.getDocument().getAttribute('footnote') || ''
-  const authorHeader = author ? `<p class="author">${author}</p>` : ''
-  const instituteHeader = institute ? `<p class="institute">${institute}</p>` : ''
-  const footnoteFooter = footnote ? `<p class="footnote">${footnote}</p>` : ''
-  const collaboratorsHeader = collaborators ? `<p class="collaborators">${collaborators}</p>` : ''
-  
-  const titleBgStyle = background ? ` style="background-image: url(${node.getImageUri(background)}); background-size: cover; background-repeat: no-repeat"` : ''
+  const doc = node.getDocument()
+  const author = doc.getAuthor() || ''
+  const institute = doc.getAttribute('institute') || ''
+  const collaborators = doc.getAttribute('collaborators') || ''
+  const background = doc.getAttribute('title-background') || ''
+  const footnote = doc.getAttribute('footnote') || ''
+
+  const titleBgStyle = renderBackgroundStyle(node, background)
 
   return `<section class="title slide"${titleBgStyle}>
   <header>
     ${titleSliderHeader(node)}
-    ${authorHeader}
-    ${instituteHeader}
-    ${collaboratorsHeader}
+    ${renderElement('author', author)}
+    ${renderElement('institute', institute)}
+    ${renderElement('collaborators', collaborators)}
   </header>
   <footer>
-    ${footnoteFooter}
+    ${renderElement('footnote', footnote)}
   </footer>
 </section>`
 }
@@ -110,52 +126,35 @@ const sectionTitle = (node) => {
 const sectionRoles = (node) => {
   const roles = node.getRoles() || []
   roles.unshift('slide')
-  const image = getImageCanvas(node)
-  if (image) {
-    roles.push('image')
-  }
+  getImageCanvas(node).map(
+    () => roles.push('image')
+  )
   return roles
 }
 
 const elementId = (node) => {
-  const id = node.getId()
-  if (id) {
-    return ` id="${id}"`
-  }
-  return ''
+  return Maybe(node.getId())
+    .map(id => ` id="${id}"`)
+    .getOrElse('')
 }
 
-function hasNoPaginationAttribute(block) {
-  // Check if the block has attributes and $$smap within attributes
-  if (
-    block.attributes &&
-    block.attributes.$$smap &&
-    block.attributes.$$smap.role
-  ) {
-    // Split the role string by spaces and check if 'no-pagination' is one of the elements
-    return block.attributes.$$smap.role.split(" ").includes("no-pagination");
-  }
-  return false;
+const hasNoPaginationAttribute = (block) => {
+  return getAttribute(block, 'attributes.$$smap.role')
+    .map(role => role.split(' ').includes('no-pagination'))
+    .getOrElse(false)
 }
 
-function calculateTotalPages(node) {
-  let totalPages = 0;
-  node.parent.blocks.forEach((block) => {
-    if (!hasNoPaginationAttribute(block)) {
-      totalPages++;
-    }
-  });
-  return totalPages;
+const calculateTotalPages = (node) => {
+  return node.parent.blocks.reduce((count, block) => {
+    return hasNoPaginationAttribute(block) ? count : count + 1
+  }, 0)
 }
 
-function calculatePageNumber(node) {
-  let noPaginationNumber = 0;
-  node.parent.blocks.forEach((block) => {
-    if (hasNoPaginationAttribute(block) && block.index < node.index) {
-      noPaginationNumber++;
-    }
-  });
-  return node.index - noPaginationNumber + 1;
+const calculatePageNumber = (node) => {
+  const noPaginationCount = node.parent.blocks.reduce((count, block) => {
+    return hasNoPaginationAttribute(block) && block.index < node.index ? count + 1 : count
+  }, 0)
+  return node.index - noPaginationCount + 1
 }
 
 function paragraph(node) { return `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>` }
@@ -203,12 +202,15 @@ function image(node) {
   if (roles && roles.includes('canvas')) {
     return ''
   }
-  const width = node.getAttribute('width')
-  const widthStyle = width ? ` width=${width}` : ''
-  const height = node.getAttribute('height')
-  const heightStyle = height ? ` height=${height}` : ''
-  const figcaption = node.getAttribute('figcaption') || ''
-  const figcap = figcaption ? `<figcaption>${figcaption}</figcaption>` : ''
+  const widthStyle = Maybe(node.getAttribute('width'))
+    .map(width => ` width=${width}`)
+    .getOrElse('')
+  const heightStyle = Maybe(node.getAttribute('height'))
+    .map(height => ` height=${height}`)
+    .getOrElse('')
+  const figcap = Maybe(node.getAttribute('figcaption'))
+    .map(figcaption => `<figcaption>${figcaption}</figcaption>`)
+    .getOrElse('')
   const roleClass = roles.length > 0 ? `image ${roles.join(' ')}` : 'image'
   return `<figure class="${roleClass}"><img src="${node.getImageUri(node.getAttribute('target'))}"${widthStyle}${heightStyle}/>${figcap}</figure>`
 }
