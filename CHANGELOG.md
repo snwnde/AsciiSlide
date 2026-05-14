@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.11 - 2026-05-14
+#### Bug Fixes
+- chromium inset - (0eb9e09) - Senwen Deng
+- read env var - (740095f) - Senwen Deng
+#### Refactoring
+- monad converter - (1463294) - Senwen Deng
+
+- - -
+
 ## 0.2.10 - 2026-03-05
 #### Bug Fixes
 - head body struct - (0c01c2f) - Senwen Deng
