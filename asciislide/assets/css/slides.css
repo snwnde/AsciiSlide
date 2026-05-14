@@ -140,6 +140,7 @@ html {
 
 .slide {
   position: absolute;
+  inset: 0;
   width: 1024px;
   height: 768px;
   padding: 64px 96px;
