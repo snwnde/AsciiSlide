@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.12 - 2026-05-14
+#### Documentation
+- better readme - (e6bc374) - Senwen Deng
+
+- - -
+
 ## 0.2.11 - 2026-05-14
 #### Bug Fixes
 - chromium inset - (0eb9e09) - Senwen Deng
