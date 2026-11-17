@@ -157,6 +157,22 @@ const calculatePageNumber = (node) => {
   return node.index - noPaginationCount + 1
 }
 
+const presentationTheme = (node) => {
+  const theme = String(
+    node.getDocument().getAttribute('theme') || ''
+  ).trim().toLowerCase();
+
+  if (!theme) {
+    return 'marine';
+  }
+
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(theme)) {
+    throw new Error(`Invalid presentation theme: ${theme}`);
+  }
+
+  return theme;
+};
+
 function paragraph(node) { return `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>` }
 function section(node) {
   if (node.getLevel() !== 1) {
@@ -191,7 +207,7 @@ hljs.initHighlightingOnLoad();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 <!-- <script src="${customScriptContent(node)}" defer></script> -->
 </head>
-<body>
+<body data-asciislide-theme="${presentationTheme(node)}">
 ${titleSlide(node)}
 ${node.getContent()}
 </body>`

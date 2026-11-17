@@ -45,7 +45,10 @@
             f.className = 'presentation-footer';
             canvas.appendChild(f);
         }
-        f.textContent = `${i + 1} / ${slides.length}`;
+        const s = slides[i];
+        const { slideNumber: n, slideCount: c } = s.dataset;
+        const hidden = !n || !c || s.classList.contains('title') || s.classList.contains('no-pagination');
+        f.textContent = hidden ? '' : `${n} / ${c}`;
     }
 
     function next() {
