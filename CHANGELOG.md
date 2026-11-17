@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.3.0 - 2026-11-17
+#### Features
+- added themes - (efe313d) - Senwen Deng
+#### Refactoring
+- adapted to latest upstream - (5ed30aa) - Senwen Deng
+
+- - -
+
 ## 0.2.12 - 2026-05-14
 #### Documentation
 - better readme - (e6bc374) - Senwen Deng
