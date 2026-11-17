@@ -1,166 +1,232 @@
+
 const { join, isAbsolute } = require('path');
 const { URL } = require('url');
-const defaultStyleDir = `../assets/`
+
+const DEFAULT_STYLES_DIRECTORY = '../assets/';
+const DEFAULT_STYLESHEET = join('css', 'slides.css');
+
+// -----------------------------------------------------------------------------
+// Utility helpers
+// -----------------------------------------------------------------------------
 
 const Maybe = (value) => ({
   value,
-  map: (fn) => Maybe(value != null ? fn(value) : null),
-  getOrElse: (defaultVal) => value != null ? value : defaultVal,
-})
 
-const getAttribute = (obj, path) => {
-  const keys = path.split('.')
-  let current = obj
+  map: (callback) =>
+    Maybe(value != null ? callback(value) : null),
+
+  getOrElse: (defaultValue) =>
+    value != null ? value : defaultValue,
+});
+
+const getAttribute = (object, path) => {
+  const keys = path.split('.');
+  let current = object;
+
   for (const key of keys) {
-    current = current?.[key]
-    if (current == null) return Maybe(null)
-  }
-  return Maybe(current)
-}
+    current = current?.[key];
 
-const customStyleDir = (node) => {
-  const stylesDirectory = node.getAttribute('stylesdir');
-  if (stylesDirectory) {
-    try {
-      const url = new URL(stylesDirectory);
-      return url.href;
-    } catch (_) {
-      if (isAbsolute(stylesDirectory)) {
-        return stylesDirectory;
-      }
-      return join(node.getDocument().getBaseDir(), stylesDirectory);
+    if (current == null) {
+      return Maybe(null);
     }
   }
-  return defaultStyleDir;
+
+  return Maybe(current);
 };
 
+const renderParagraph = (className, content) => {
+  if (content == null || content === '') {
+    return '';
+  }
 
-const customStyleContent = (node) => {
-  const stylesheet = node.getAttribute('stylesheet') || join(`css`, `slides.css`)
+  return `<p class="${className}">${content}</p>`;
+};
+
+// -----------------------------------------------------------------------------
+// Asset paths
+// -----------------------------------------------------------------------------
+
+const getStylesDirectory = (node) => {
+  const stylesDirectory = node.getAttribute('stylesdir');
+
+  if (!stylesDirectory) {
+    return DEFAULT_STYLES_DIRECTORY;
+  }
+
+  try {
+    return new URL(stylesDirectory).href;
+  } catch {
+    if (isAbsolute(stylesDirectory)) {
+      return stylesDirectory;
+    }
+
+    return join(
+      node.getDocument().getBaseDir(),
+      stylesDirectory,
+    );
+  }
+};
+
+const getStylesheetPath = (node) => {
+  const stylesheet =
+    node.getAttribute('stylesheet') || DEFAULT_STYLESHEET;
+
   if (isAbsolute(stylesheet)) {
-    return stylesheet
+    return stylesheet;
   }
-  let start = customStyleDir(node)
-  return start + stylesheet
-}
 
-const customScriptContent = (node) => {
-  let start = customStyleDir(node)
-  return start + join(`js`, `presentation.js`)
-}
+  return getStylesDirectory(node) + stylesheet;
+};
 
-const titleSliderHeader = (node) => {
-  const doctitle = node.getDocumentTitle({ partition: true })
-  if (doctitle.hasSubtitle()) {
-    return `<h1>${doctitle.getMain()}</h1>
-<h2>${doctitle.getSubtitle()}</h2>`
+const getPresentationScriptPath = (node) =>
+  getStylesDirectory(node) + join('js', 'presentation.js');
+
+const getImageUri = async (node, target) => {
+  const imageUri = await node.getImageUri(target);
+  const imagesDirectory =
+    node.getDocument().getAttribute('imagesdir');
+
+  if (
+    !imagesDirectory ||
+    isAbsolute(imageUri) ||
+    /^[a-z]+:\/\//i.test(imageUri)
+  ) {
+    return imageUri;
   }
-  return `<h1>${node.getDocumentTitle()}</h1>`
-}
 
+  return join(imagesDirectory, imageUri);
+};
 
-const getImageCanvas = (node) => {
-  return Maybe(node.findBy({ context: 'image', role: 'canvas' }))
-    .map(images => images?.length > 0 ? images[0] : null)
-}
+// -----------------------------------------------------------------------------
+// Image helpers
+// -----------------------------------------------------------------------------
 
-const sectionInlineStyle = (node) => {
-  return getImageCanvas(node)
-    .map(image => {
-      const roles = node.getRoles() || []
-      const backgroundSize = roles.includes('contain') ? 'contain' : 'cover'
-      const backgroundUrl = node.getImageUri(image.getAttribute('target'))
-      return ` style="background-image: url(${backgroundUrl}); background-size: ${backgroundSize}; background-repeat: no-repeat"`
-    })
-    .getOrElse('')
-}
+const getCanvasImage = (node) => {
+  const images = node.findBy({
+    context: 'image',
+    role: 'canvas',
+  });
 
-const renderElement = (className, content) =>
-  Maybe(content)
-    .map(value => `<p class="${className}">${value}</p>`)
-    .getOrElse('')
+  return images?.[0] ?? null;
+};
 
-const renderBackgroundStyle = (node, backgroundUrl) =>
-  Maybe(backgroundUrl)
-    .map(bg => ` style="background-image: url(${node.getImageUri(bg)}); background-size: cover; background-repeat: no-repeat"`)
-    .getOrElse('')
+const getSectionBackgroundStyle = async (node) => {
+  const image = getCanvasImage(node);
 
-const titleSlide = (node) => {
-  const doc = node.getDocument()
-  const author = doc.getAuthor() || ''
-  const institute = doc.getAttribute('institute') || ''
-  const collaborators = doc.getAttribute('collaborators') || ''
-  const background = doc.getAttribute('title-background') || ''
-  const footnote = doc.getAttribute('footnote') || ''
+  if (!image) {
+    return '';
+  }
 
-  const titleBgStyle = renderBackgroundStyle(node, background)
+  const roles = node.getRoles() || [];
+  const backgroundSize = roles.includes('contain')
+    ? 'contain'
+    : 'cover';
 
-  return `<section class="title slide"${titleBgStyle}>
-  <header>
-    ${titleSliderHeader(node)}
-    ${renderElement('author', author)}
-    ${renderElement('institute', institute)}
-    ${renderElement('collaborators', collaborators)}
-  </header>
-  <footer>
-    ${renderElement('footnote', footnote)}
-  </footer>
-</section>`
-}
+  const backgroundImage = await getImageUri(
+    node,
+    image.getAttribute('target'),
+  );
 
-const sectionTitle = (node) => {
-  const titleSeparator = node.getDocument().getAttribute('title-separator') || ':'
-  const parts = node.getTitle().split(titleSeparator)
-  const main = parts[0]
-  const subtitle = parts[1]
-  const level = node.getLevel()
+  return [
+    `background-image: url(${backgroundImage})`,
+    `background-size: ${backgroundSize}`,
+    'background-repeat: no-repeat',
+  ].join('; ');
+};
+
+const renderBackgroundStyle = async (node, backgroundUrl) => {
+  if (!backgroundUrl) {
+    return '';
+  }
+
+  const imageUri = await node.getImageUri(backgroundUrl);
+
+  return ` style="background-image: url(${imageUri}); background-size: cover; background-repeat: no-repeat"`;
+};
+
+// -----------------------------------------------------------------------------
+// Title helpers
+// -----------------------------------------------------------------------------
+
+const renderDocumentTitle = (node) => {
+  const documentTitle = node.getDocumentTitle({
+    partition: true,
+  });
+
+  if (documentTitle.hasSubtitle()) {
+    return `
+      <h1>${documentTitle.getMain()}</h1>
+      <h2>${documentTitle.getSubtitle()}</h2>
+    `;
+  }
+
+  return `<h1>${node.getDocumentTitle()}</h1>`;
+};
+
+const renderSectionTitle = (node) => {
+  const separator =
+    node.getDocument().getAttribute('title-separator') || ':';
+
+  const [mainTitle, subtitle] = node.getTitle().split(separator);
+
+  const level = node.getLevel();
+
   if (subtitle) {
-    return `<header>
-  <h${level + 1}>${main}</h${level + 1}>
-  <h${level + 2}>${subtitle}</h${level + 2}>
-</header>`
+    return `
+      <header>
+        <h${level + 1}>${mainTitle}</h${level + 1}>
+        <h${level + 2}>${subtitle}</h${level + 2}>
+      </header>
+    `;
   }
-  return `<h${level + 1}>${node.getTitle()}</h${level + 1}>`
-}
 
-const sectionRoles = (node) => {
-  const roles = node.getRoles() || []
-  roles.unshift('slide')
-  getImageCanvas(node).map(
-    () => roles.push('image')
-  )
-  return roles
-}
+  return `<h${level + 1}>${node.getTitle()}</h${level + 1}>`;
+};
 
-const elementId = (node) => {
-  return Maybe(node.getId())
-    .map(id => ` id="${id}"`)
-    .getOrElse('')
-}
+// -----------------------------------------------------------------------------
+// Slide helpers
+// -----------------------------------------------------------------------------
 
-const hasNoPaginationAttribute = (block) => {
-  return getAttribute(block, 'attributes.$$smap.role')
-    .map(role => role.split(' ').includes('no-pagination'))
-    .getOrElse(false)
-}
+const getSectionRoles = (node) => {
+  const roles = [...(node.getRoles() || []), 'slide'];
 
-const calculateTotalPages = (node) => {
-  return node.parent.blocks.reduce((count, block) => {
-    return hasNoPaginationAttribute(block) ? count : count + 1
-  }, 0)
-}
+  if (getCanvasImage(node)) {
+    roles.push('image');
+  }
 
-const calculatePageNumber = (node) => {
-  const noPaginationCount = node.parent.blocks.reduce((count, block) => {
-    return hasNoPaginationAttribute(block) && block.index < node.index ? count + 1 : count
-  }, 0)
-  return node.index - noPaginationCount + 1
-}
+  return roles;
+};
 
-const presentationTheme = (node) => {
+const getElementId = (node) =>
+  getAttribute(node, 'id')
+    .map((id) => ` id="${id}"`)
+    .getOrElse('');
+
+const hasNoPagination = (block) =>
+  getAttribute(block, 'attributes.$$smap.role')
+    .map((role) => role.split(' ').includes('no-pagination'))
+    .getOrElse(false);
+
+const getTotalPages = (node) =>
+  node.parent.blocks.filter(
+    (block) => !hasNoPagination(block),
+  ).length;
+
+const getPageNumber = (node) => {
+  const excludedPreviousPages = node.parent.blocks.filter(
+    (block) =>
+      hasNoPagination(block) && block.index < node.index,
+  ).length;
+
+  return node.index - excludedPreviousPages + 1;
+};
+
+const getPresentationTheme = (node) => {
   const theme = String(
-    node.getDocument().getAttribute('theme') || ''
-  ).trim().toLowerCase();
+    node.getDocument().getAttribute('theme') || '',
+  )
+    .trim()
+    .toLowerCase();
 
   if (!theme) {
     return 'marine';
@@ -173,68 +239,210 @@ const presentationTheme = (node) => {
   return theme;
 };
 
-function paragraph(node) { return `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>` }
-function section(node) {
-  if (node.getLevel() !== 1) {
-    return `${sectionTitle(node)}
-    ${node.getContent()}`;
-  }
-  const noTitleToggle = node.getTitle() === '!' ? ' no-title' : ''
-  const slideNum = ` data-slide-number="${calculatePageNumber(node)}"`
-  const slideCount = ` data-slide-count="${calculateTotalPages(node)}"`
-  const slideTransition = ` transition="${node.getAttribute('transition') || node.getDocument().getAttribute('slide-transion') || 'zoom'}"`
-  return `<section class="${sectionRoles(node).join(' ')}${noTitleToggle}"${slideTransition}${slideNum}${slideCount}${sectionInlineStyle(node)}>
-  ${sectionTitle(node)}
-  ${node.getContent()}
-</section>`
+// -----------------------------------------------------------------------------
+// Document rendering
+// -----------------------------------------------------------------------------
+
+async function renderTitleSlide(node) {
+  const document = node.getDocument();
+
+  const author = document.getAuthor() || '';
+  const institute = document.getAttribute('institute') || '';
+  const collaborators =
+    document.getAttribute('collaborators') || '';
+  const background =
+    document.getAttribute('title-background') || '';
+  const footnote = document.getAttribute('footnote') || '';
+
+  const backgroundStyle = await renderBackgroundStyle(
+    node,
+    background,
+  );
+
+  return `
+    <section class="title slide"${backgroundStyle}>
+      <header>
+        ${renderDocumentTitle(node)}
+        ${renderParagraph('author', author)}
+        ${renderParagraph('institute', institute)}
+        ${renderParagraph('collaborators', collaborators)}
+      </header>
+
+      <footer>
+        ${renderParagraph('footnote', footnote)}
+      </footer>
+    </section>
+  `;
 }
-function document(node) {
+
+async function renderSection(node) {
+  const content = await node.getContent();
+
+  if (node.getLevel() !== 1) {
+    return `
+      ${renderSectionTitle(node)}
+      ${content}
+    `;
+  }
+
+  const noTitleClass = node.getTitle() === '!'
+    ? ' no-title'
+    : '';
+
+  const slideNumber = getPageNumber(node);
+  const slideCount = getTotalPages(node);
+
+  const transition =
+    node.getAttribute('transition') ||
+    node.getDocument().getAttribute('slide-transion') ||
+    'zoom';
+
+  const backgroundStyle = await getSectionBackgroundStyle(node);
+
+  const inlineStyle = backgroundStyle
+    ? ` style="${backgroundStyle}"`
+    : '';
+
+  return `
+    <section
+      class="${getSectionRoles(node).join(' ')}${noTitleClass}"
+      transition="${transition}"
+      data-slide-number="${slideNumber}"
+      data-slide-count="${slideCount}"${inlineStyle}
+    >
+      ${renderSectionTitle(node)}
+      ${content}
+    </section>
+  `;
+}
+
+async function renderDocument(node) {
+  const stylesDirectory = getStylesDirectory(node);
+  const stylesheet = getStylesheetPath(node);
+  const presentationScript = getPresentationScriptPath(node);
+  const theme = getPresentationTheme(node);
+
+  const titleSlideHtml = await renderTitleSlide(node);
+  const content = await node.getContent();
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link href="${customStyleDir(node)}/css/asciidoctor.css" rel="stylesheet">
-<link rel="stylesheet" href="${customStyleContent(node)}" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
-<script>
-hljs.initHighlightingOnLoad();
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
-<!-- <script src="${customScriptContent(node)}" defer></script> -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link
+    href="${stylesDirectory}/css/asciidoctor.css"
+    rel="stylesheet"
+  >
+  <link href="${stylesheet}" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"
+  >
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\\\(', '\\\\)']],
+      displayMath: [['\\\\[', '\\\\]']],
+    },
+    svg: {
+      fontCache: 'none',
+    },
+    startup: {
+      pageReady: () =>
+        MathJax.startup.defaultPageReady().then(() => {
+          document.documentElement.classList.add('mathjax-ready');
+        }),
+    },
+  };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <!-- <script src="${presentationScript}" defer></script> -->
 </head>
-<body data-asciislide-theme="${presentationTheme(node)}">
-${titleSlide(node)}
-${node.getContent()}
-</body>`
-}
-function open(node) { return `<div${elementId(node)} class="${node.getRoles().join(' ')}">${node.getContent()}</div>` }
-function image(node) {
-  const roles = node.getRoles()
-  if (roles && roles.includes('canvas')) {
-    return ''
-  }
-  const widthStyle = Maybe(node.getAttribute('width'))
-    .map(width => ` width=${width}`)
-    .getOrElse('')
-  const heightStyle = Maybe(node.getAttribute('height'))
-    .map(height => ` height=${height}`)
-    .getOrElse('')
-  const figcap = Maybe(node.getAttribute('figcaption'))
-    .map(figcaption => `<figcaption>${figcaption}</figcaption>`)
-    .getOrElse('')
-  const roleClass = roles.length > 0 ? `image ${roles.join(' ')}` : 'image'
-  return `<figure class="${roleClass}"><img src="${node.getImageUri(node.getAttribute('target'))}"${widthStyle}${heightStyle}/>${figcap}</figure>`
+
+<body data-asciislide-theme="${theme}">
+  ${titleSlideHtml}
+  ${content}
+</body>
+</html>`;
 }
 
-module.exports = {
-  paragraph: paragraph,
-  section: section,
-  document: document,
-  open: open,
-  image: image
+// -----------------------------------------------------------------------------
+// Element rendering
+// -----------------------------------------------------------------------------
+
+async function renderParagraphElement(node) {
+  return `<p class="${(node.getRoles() || []).join(' ')}">${await node.getContent()}</p>`;
 }
+
+async function renderOpenBlock(node) {
+  const id = getElementId(node);
+  const roles = (node.getRoles() || []).join(' ');
+
+  return `<div${id} class="${roles}">${await node.getContent()}</div>`;
+}
+
+async function renderImage(node) {
+  const roles = node.getRoles() || [];
+
+  if (roles.includes('canvas')) {
+    return '';
+  }
+
+  const width = node.getAttribute('width');
+  const height = node.getAttribute('height');
+  const caption = node.getAttribute('figcaption');
+
+  const widthAttribute = width ? ` width="${width}"` : '';
+  const heightAttribute = height ? ` height="${height}"` : '';
+
+  const roleClass = roles.length
+    ? `image ${roles.join(' ')}`
+    : 'image';
+
+  const source = await getImageUri(
+    node,
+    node.getAttribute('target'),
+  );
+
+  const captionHtml = caption
+    ? `<figcaption>${caption}</figcaption>`
+    : '';
+
+  return `
+    <figure class="${roleClass}">
+      <img src="${source}"${widthAttribute}${heightAttribute}>
+      ${captionHtml}
+    </figure>
+  `;
+}
+
+// -----------------------------------------------------------------------------
+// Public API
+// -----------------------------------------------------------------------------
+
+module.exports = {
+  paragraph: renderParagraphElement,
+  section: renderSection,
+  document: renderDocument,
+  open: renderOpenBlock,
+  image: renderImage,
+};

@@ -1,13 +1,15 @@
-FROM ggrossetie/asciidoctor-web-pdf:1.0.0-alpha.16
-# Install make
+FROM ggrossetie/asciidoctor-web-pdf:1.0.3
+
 USER root
-RUN apk add --quiet --no-cache --update make \
-     && fc-cache -f
-# Copy app
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends make \
+    && rm -rf /var/lib/apt/lists/* \
+    && fc-cache -f
+
 COPY --chown=asciidoctor:asciidoctor asciislide /asciislide
-# Volumes to be mounted
+
 VOLUME /asciislide/src
-# Set user as the upstream image does
+
 USER asciidoctor
 WORKDIR /asciislide
 ENTRYPOINT ["sh", "-c"]

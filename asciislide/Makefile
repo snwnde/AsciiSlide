@@ -28,7 +28,12 @@ all: $(HTML_FILES) $(OUT_IMG) $(OUT_CSS) $(OUT_JS)
 
 $(BUILD_DIR)/%.html: $(SRC_DIR)/%.adoc
 	@echo "Building the presentation slides..."
-	@$(ASCIIDOCTOR_WEB_PDF) $? --template-require ./converter.js -D $(dir $@)
+	@$(ASCIIDOCTOR_WEB_PDF) $? \
+	--template-require ./converter.js \
+	--preserve-html \
+	--preprocess-scripts-wait-for \
+	"document.documentElement.classList.contains('mathjax-ready')" \
+	-D $(dir $@)
 	@echo "Moving the html file as well..."
 	@mv $(subst .adoc,.html,$?) $@
 	@sed -i '/<!-- <script src=.*presentation\.js.*><\/script> -->/s/<!-- //; s/ -->//' $@

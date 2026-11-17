@@ -5,6 +5,7 @@
 :toc!:
 :stylesdir:
 :stylesheet:
+:theme: marine
 :stem: latex
 :icons: font
 :imagesdir: images
@@ -61,13 +62,13 @@ def hello():
 ----
 
 [source,asciidoc]
-----
+....
 [source,python]
-----ㅤ
+----
 def hello():
     print('Hello, world!')
-----ㅤ
 ----
+....
 
 == A slide with image
 An image can be included in a slide.
@@ -85,7 +86,7 @@ image::example.png[width=100%]
 == A slide with two columns
 The previous slide is an example of a slide with two columns.
 [source,asciidoc]
-----
+....
 == A slide with image
 An image can be included in a slide.
 [.columns.w1-1]
@@ -94,10 +95,10 @@ An image can be included in a slide.
 image::example.png[width=100%]
 [.column]
 [source,asciidoc]
-----ㅤ
-image::example.png[width=100%]
-----ㅤ
 ----
+image::example.png[width=100%]
+----
+....
 
 == Write HTML
 You can write and render HTML in a slide.
@@ -132,7 +133,8 @@ Define the presentation settings at the header of the file.
 :lang: en
 :toc!:
 :stylesdir: path/to/styles
-:stylesheet: custom.css
+:stylesheet: // Omit to use the default stylesheet
+:theme: marine // Theme within the default stylesheet
 :stem: latex
 :icons: font
 :imagesdir: images
