@@ -1,0 +1,937 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@400;500&family=Alegreya+Sans+SC:wght@500;700&family=Alegreya+Sans:wght@500;700&family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=Yanone+Kaffeesatz:wght@400;600&family=Lato:ital,wght@0,400;0,700;1,400&family=Alegreya+SC:wght@400&display=swap');
+
+
+/* ==========================================================================
+   1. DESIGN TOKENS
+   ========================================================================== */
+
+:root {
+  /* Slide dimensions */
+  --slide-w: 1024px;
+  --slide-h: 768px;
+
+  /* Slide spacing */
+  --slide-pad-y: var(--space-6);
+  --slide-pad-x: 96px;
+
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+
+  /* Typography scale */
+  --fs-title: 2.6rem;
+  --fs-subtitle: 1.6rem;
+  --fs-h2: 2.1rem;
+  --fs-h3: 1.45rem;
+  --fs-h4: 1.2rem;
+  --fs-body: 1rem;
+  --fs-small: 0.8rem;
+  --fs-code: 0.85rem;
+
+  /* Line heights */
+  --lh-body: 1.5;
+  --lh-heading: 1.15;
+
+  /* Motion and presentation */
+  --transition: 280ms cubic-bezier(.2, .9, .3, 1);
+  --stage: #1b1b1f;
+}
+
+
+/* ==========================================================================
+   2. THEMES
+   ========================================================================== */
+
+/* Editorial theme */
+
+body[data-asciislide-theme="editorial"] {
+  --bg: #fbf8f1;
+  --panel: #f1eadc;
+  --panel-strong: #d8cbb8;
+
+  --theme: #28211c;
+  --text: #3d342d;
+  --muted: #6b6058;
+  --accent: #9b4d2e;
+
+  /* Typography */
+  --font-body: "Newsreader", "Source Serif 4", Georgia, serif;
+  --font-heading: "Fraunces", "Newsreader", Georgia, serif;
+  --font-small-caps: "Alegreya SC", var(--font-heading);
+  --font-code: "JetBrains Mono", ui-monospace, monospace;
+  --font-math: "STIX Two Text", "Libertinus Math", "Latin Modern Math", serif;
+
+  /* Heading styles */
+  --heading-weight: 600;
+  --heading-tracking: -0.015em;
+  --lh-body: 1.55;
+  --h2-rule: 3px double var(--theme);
+  --h2-prefix: "";
+
+  /* Shape and depth */
+  --radius: 2px;
+  --shadow: 0 10px 30px rgba(60, 40, 20, 0.16);
+}
+
+
+/* Humanist theme */
+
+body[data-asciislide-theme="humanist"] {
+  --bg: #f7fafc;
+  --panel: #edf2f7;
+  --panel-strong: #d5dee8;
+
+  --theme: #023047;
+  --text: #243746;
+  --muted: #4d5d6e;
+  --accent: #1f5fa6;
+
+  /* Typography */
+  --font-body: "Source Sans 3", "Lato", sans-serif;
+  --font-heading: "Alegreya Sans", "Source Sans 3", sans-serif;
+  --font-small-caps: "Alegreya Sans SC", var(--font-heading);
+  --font-code: "JetBrains Mono", ui-monospace, monospace;
+  --font-math: "STIX Two Text", "Libertinus Math", "Latin Modern Math", serif;
+
+  /* Heading styles */
+  --heading-weight: 700;
+  --heading-tracking: 0;
+  --lh-body: 1.5;
+  --h2-rule: 0;
+  --h2-prefix: "";
+
+  /* Shape and depth */
+  --radius: 10px;
+  --shadow: 0 8px 28px rgba(2, 6, 23, 0.14);
+}
+
+
+/* Technical theme */
+
+body[data-asciislide-theme="technical"] {
+  --bg: #0e1419;
+  --panel: #151d25;
+  --panel-strong: #2d3a46;
+
+  --theme: #eaf1f6;
+  --text: #c9d5de;
+  --muted: #8fa1af;
+  --accent: #56d364;
+
+  /* Syntax highlighting */
+  --hl-comment: #6e8190;
+  --hl-string: #f0b86e;
+  --hl-number: #79c0ff;
+  --hl-title: #d2a8ff;
+
+  /* Typography */
+  --font-body: "IBM Plex Sans", sans-serif;
+  --font-heading: "JetBrains Mono", ui-monospace, monospace;
+  --font-small-caps: var(--font-code);
+  --font-code: "JetBrains Mono", ui-monospace, monospace;
+  --font-math: "STIX Two Text", "IBM Plex Serif", serif;
+
+  /* Heading styles */
+  --heading-weight: 700;
+  --heading-tracking: -0.03em;
+  --lh-body: 1.5;
+  --h2-rule: 0;
+  --h2-prefix: "> ";
+
+  /* Shape and depth */
+  --radius: 4px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+
+/* Marine theme */
+
+body[data-asciislide-theme="marine"] {
+  --bg: #f7fafc;
+  --panel: #edf2f7;
+  --panel-strong: #d5dee8;
+
+  --theme: #023047;
+  --text: #023047;
+  --muted: #5b6b80;
+  --accent: #2563a8;
+  --marker: #ffb703;
+
+  /* Typography */
+  --font-body: "Lato", sans-serif;
+  --font-heading: "Yanone Kaffeesatz", sans-serif;
+  --font-small-caps: "Alegreya SC", var(--font-heading);
+  --font-code: "JetBrains Mono", ui-monospace, monospace;
+  --font-math: "STIX Two Text", "Libertinus Math", serif;
+
+  /* Heading styles */
+  --heading-weight: 400;
+  --heading-tracking: 0;
+  --fs-title: 3rem;
+  --fs-h2: 2.3rem;
+  --fs-h3: 1.7rem;
+  --fs-h4: 1.4rem;
+  --lh-body: 1.4;
+  --h2-rule: 0;
+  --h2-prefix: "";
+
+  /* Shape and depth */
+  --radius: 10px;
+  --shadow: 0 6px 20px rgba(2, 6, 23, 0.08);
+}
+
+/* ==========================================================================
+   3. GLOBAL RESET AND PAGE SETUP
+   ========================================================================== */
+
+@page {
+  size: 1024px 768px;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+
+  background: var(--stage);
+  color: var(--text);
+
+  font-size: 15pt;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--stage);
+}
+
+
+/* ==========================================================================
+   4. PRESENTATION STAGE AND CANVAS
+   ========================================================================== */
+
+.presentation-stage {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+}
+
+.presentation-canvas {
+  position: relative;
+
+  width: var(--slide-w);
+  height: var(--slide-h);
+  overflow: hidden;
+
+  background: var(--bg);
+  color: var(--text);
+
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+
+  transform-origin: center;
+  pointer-events: auto;
+}
+
+.presentation-canvas :where(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.presentation-hint {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+
+  padding: 6px 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(15, 23, 42, 0.6);
+
+  font-family: var(--font-body);
+  font-size: 14px;
+
+  backdrop-filter: blur(6px);
+}
+
+
+/* ==========================================================================
+   5. SLIDE FOOTERS AND PAGE NUMBERS
+   ========================================================================== */
+
+.presentation-footer,
+.slide::after {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  z-index: 10;
+
+  padding: 5px 8px;
+
+  color: var(--muted);
+
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.slide>footer>p.footer-msg {
+  margin: 0;
+  position: absolute;
+  left: 36px;
+  bottom: 8px;
+  z-index: 10;
+
+  color: var(--muted);
+  font-size: var(--fs-small);
+  text-align: left;
+}
+
+.presentation-footer:empty {
+  display: none;
+}
+
+
+/* ==========================================================================
+   6. PRINT STYLES
+   ========================================================================== */
+
+@media print {
+
+  html,
+  body {
+    background: var(--bg);
+    overflow: visible;
+
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .presentation-stage {
+    position: static !important;
+    display: block !important;
+  }
+
+  .presentation-canvas {
+    width: var(--slide-w);
+    height: var(--slide-h);
+
+    border-radius: 0;
+    box-shadow: none;
+
+    transform: none !important;
+  }
+
+  .slide {
+    position: relative !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    page-break-after: always;
+  }
+
+  .slide:last-child {
+    page-break-after: auto;
+  }
+
+  .slide::after {
+    content: attr(data-slide-number) " / " attr(data-slide-count);
+  }
+
+  .slide.title::after,
+  .slide.no-pagination::after {
+    content: "";
+  }
+
+  .presentation-hint,
+  .presentation-footer {
+    display: none;
+  }
+
+  html,
+  body {
+    display: block !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .slide {
+    display: flex !important;
+    position: relative !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  .slide:last-of-type {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+}
+
+/* ==========================================================================
+   7. SLIDE STRUCTURE AND TRANSITIONS
+   ========================================================================== */
+
+.slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+
+  width: var(--slide-w);
+  height: var(--slide-h);
+
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+
+  transform: translateY(10px) scale(0.995);
+
+  transition:
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.slide.active {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+.slide[transition="fade"] {
+  transition: opacity var(--transition);
+}
+
+.slide[transition="zoom"] {
+  transform-origin: center;
+}
+
+
+/* ==========================================================================
+   8. FRAGMENTS AND VISIBILITY
+   ========================================================================== */
+
+.fragment {
+  opacity: 0;
+  pointer-events: none;
+
+  transform: translateY(8px);
+
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.fragment.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.no-title>h2 {
+  display: none;
+}
+
+
+/* ==========================================================================
+   9. TITLE SLIDE
+   ========================================================================== */
+
+.slide.title {
+  justify-content: center;
+}
+
+.slide.title h1,
+.slide.title h2 {
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+
+.slide.title h1 {
+  max-width: 820px;
+  margin-bottom: var(--space-2);
+
+  font-size: var(--fs-title);
+  line-height: 1.08;
+}
+
+.slide.title h2 {
+  margin-bottom: var(--space-3);
+  padding: 0;
+
+  border: 0;
+
+  color: var(--muted);
+
+  font-size: var(--fs-subtitle);
+  font-weight: 400;
+}
+
+.slide.title h2::before {
+  content: none;
+}
+
+.slide.title>header {
+  position: relative;
+  color: var(--muted);
+}
+
+.slide.title>header>p {
+  margin-bottom: var(--space-1);
+  color: var(--theme);
+  text-align: center;
+}
+
+.slide.title>header>p.author {
+  font-family: var(--font-small-caps);
+  font-size: 1.5rem;
+}
+
+.slide.title>header>p.institute {
+  font-size: 1.15rem;
+}
+
+.slide.title>header>p.collaborators {
+  font-size: 1rem;
+  text-align: right;
+}
+
+.slide.title>footer {
+  bottom: 40px;
+}
+
+.slide.title>footer>p.footnote {
+  margin: 0;
+
+  color: var(--muted);
+  font-size: var(--fs-small);
+  text-align: right;
+}
+
+.slide.title div.admonitionblock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto;
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   10. TYPOGRAPHY AND TEXT
+   ========================================================================== */
+
+/* Paragraphs and lists */
+
+p,
+ul,
+ol {
+  margin: 0 0 var(--space-3);
+  padding-right: 5px;
+
+  color: var(--text);
+
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: var(--lh-body);
+
+  text-align: left;
+}
+
+ul,
+ol {
+  padding-left: 1.5em;
+}
+
+li+li {
+  margin-top: var(--space-1);
+}
+
+li::marker {
+  color: var(--accent);
+}
+
+
+/* Emphasis */
+
+strong {
+  color: var(--theme);
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+
+/* Blockquotes */
+
+blockquote {
+  margin: var(--space-3) 0;
+  padding: 0 0 0 var(--space-3);
+
+  border-left: 3px solid var(--accent);
+
+  color: var(--muted);
+  font-style: italic;
+}
+
+blockquote p {
+  color: inherit;
+}
+
+
+/* Links */
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+
+/* Headings */
+
+h1,
+h2,
+h3,
+h4 {
+  margin-top: 0;
+
+  color: var(--theme);
+
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-tracking);
+  line-height: var(--lh-heading);
+}
+
+h1 {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-title);
+}
+
+h3 {
+  margin-bottom: var(--space-2);
+
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  text-align: left;
+}
+
+h4 {
+  margin-bottom: var(--space-1);
+
+  font-size: var(--fs-h4);
+  font-weight: 500;
+}
+
+
+/* Slide heading overrides */
+
+.slide h2 {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-1);
+
+  border-bottom: var(--h2-rule);
+  font-size: var(--fs-h2);
+}
+
+.slide h2::before {
+  content: var(--h2-prefix);
+  color: var(--accent);
+}
+
+
+/* ==========================================================================
+   11. COLUMN LAYOUTS
+   ========================================================================== */
+
+.columns {
+  display: grid;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.columns>* {
+  min-width: 0;
+  padding: 0;
+}
+
+.columns.w1-1 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.columns.w1-2 {
+  grid-template-columns: 1fr 2fr;
+}
+
+.columns.w2-1 {
+  grid-template-columns: 2fr 1fr;
+}
+
+.exampleblock.column>.content {
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  background: inherit;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   12. CODE BLOCKS AND SYNTAX HIGHLIGHTING
+   ========================================================================== */
+
+code,
+pre {
+  font-family: var(--font-code);
+}
+
+:not(pre)>code {
+  padding: 0.05em 0.3em;
+  border-radius: var(--radius);
+
+  background: var(--panel);
+  font-size: 0.88em;
+}
+
+.literalblock pre,
+.listingblock>.content>pre {
+  overflow: auto;
+
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3);
+
+  border: 1px solid var(--panel-strong);
+  border-radius: var(--radius);
+
+  background: var(--panel);
+
+  font-size: var(--fs-code);
+  line-height: 1.45;
+}
+
+
+/* Syntax highlighting */
+
+.slide pre code.hljs {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.slide .hljs-comment,
+.slide .hljs-quote {
+  color: var(--hl-comment, var(--muted));
+  font-style: italic;
+}
+
+.slide .hljs-keyword,
+.slide .hljs-selector-tag,
+.slide .hljs-built_in {
+  color: var(--hl-keyword, var(--accent));
+}
+
+.slide .hljs-string,
+.slide .hljs-doctag,
+.slide .hljs-regexp {
+  color: var(--hl-string, #2f7a4d);
+}
+
+.slide .hljs-number,
+.slide .hljs-literal,
+.slide .hljs-attr {
+  color: var(--hl-number, #8a5a00);
+}
+
+.slide .hljs-title,
+.slide .hljs-section,
+.slide .hljs-name {
+  color: var(--hl-title, var(--theme));
+  font-weight: 600;
+}
+
+
+/* ==========================================================================
+   13. TABLES
+   ========================================================================== */
+
+table {
+  width: 100%;
+  margin: var(--space-2) 0;
+
+  border-collapse: collapse;
+
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+th,
+td {
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--panel-strong);
+  text-align: left;
+}
+
+th {
+  border-bottom: 2px solid var(--theme);
+
+  color: var(--theme);
+  background: var(--panel);
+
+  font-weight: 700;
+}
+
+td.icon,
+td.content {
+  font-size: var(--fs-body);
+}
+
+
+/* ==========================================================================
+   14. FIGURES AND MATHEMATICS
+   ========================================================================== */
+
+figure.image {
+  margin: 0;
+  text-align: center;
+}
+
+figure.image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+figcaption {
+  padding-top: var(--space-1);
+
+  color: var(--muted);
+
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-style: italic;
+
+  text-align: center;
+}
+
+.stemblock {
+  font-family: var(--font-math);
+  font-size: var(--fs-body);
+}
+
+
+/* ==========================================================================
+   15. ASCIIDOCTOR COMPONENT OVERRIDES
+   ========================================================================== */
+
+/* Code backgrounds */
+
+.slide pre {
+  color: var(--text);
+}
+
+.slide .literalblock pre,
+.slide .listingblock>.content>pre {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.slide .literalblock.output pre {
+  background: var(--panel-strong);
+  color: var(--text);
+}
+
+.slide :not(pre):not([class^=L])>code {
+  background: var(--panel);
+  color: inherit;
+  border-radius: var(--radius);
+}
+
+
+/* Table backgrounds */
+
+.slide table,
+.slide table thead,
+.slide table tfoot,
+.slide table tr.even,
+.slide table tr.alt {
+  background: transparent;
+}
+
+.slide table th,
+.slide table td {
+  color: var(--text);
+}
+
+.slide table thead th {
+  color: var(--theme);
+  background: var(--panel);
+}
+
+
+/* Example and sidebar blocks */
+
+.slide .exampleblock:not(.column)>.content,
+.slide .sidebarblock {
+  border-color: var(--panel-strong);
+  background: var(--panel);
+  color: inherit;
+}
+
+
+/* ==========================================================================
+   16. ACCESSIBILITY AND REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
