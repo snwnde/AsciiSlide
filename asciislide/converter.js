@@ -303,6 +303,8 @@ async function renderSection(node) {
     ? ` style="${backgroundStyle}"`
     : '';
 
+  const footerMsg = node.getDocument().getAttribute('footer-msg') || '';
+
   return `
     <section
       class="${getSectionRoles(node).join(' ')}${noTitleClass}"
@@ -312,6 +314,9 @@ async function renderSection(node) {
     >
       ${renderSectionTitle(node)}
       ${content}
+      <footer>
+        ${renderParagraph('footer-msg', footerMsg)}
+      </footer>
     </section>
   `;
 }

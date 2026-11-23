@@ -10,6 +10,7 @@
 :icons: font
 :imagesdir: images
 :institute: XYZ Institute
+:footer-msg: This is a footer message for the presentation.
 
 == Features
 

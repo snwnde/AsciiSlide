@@ -300,6 +300,18 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.slide>footer>p.footer-msg {
+  margin: 0;
+  position: absolute;
+  left: 36px;
+  bottom: 8px;
+  z-index: 10;
+
+  color: var(--muted);
+  font-size: var(--fs-small);
+  text-align: left;
+}
+
 .presentation-footer:empty {
   display: none;
 }
@@ -428,12 +440,6 @@ body {
 
 .slide[transition="zoom"] {
   transform-origin: center;
-}
-
-.slide>footer {
-  position: absolute;
-  right: 30px;
-  bottom: 32px;
 }
 
 
